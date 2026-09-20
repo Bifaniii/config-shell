@@ -34,10 +34,13 @@ cd ~/config-shell
 
 O `install-tokyonight.sh`:
 
-1. instala `neovim` e `ripgrep` (apt)
-2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + nvim-tree + telescope)
-3. baixa os plugins em modo headless (não precisa abrir o editor)
+1. instala `neovim`, `ripgrep` e `gcc` (apt)
+2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + treesitter + nvim-tree + telescope)
+3. baixa os plugins e compila os parsers do treesitter em modo headless (não precisa abrir o editor)
 4. carrega a paleta **Tokyo Night** no gnome-terminal
+
+> Sem o treesitter o neovim usa o realce antigo do vim (regex) e o Tokyo Night fica quase monocromático.
+> Abriu um tipo de arquivo novo? O parser é baixado sozinho (`auto_install`).
 
 #### Atalhos do neovim (`<Space>` é o leader)
 

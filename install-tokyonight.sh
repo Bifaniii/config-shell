@@ -28,8 +28,8 @@ if [[ "${1:-}" == "--pastelterm" ]]; then
     exit 0
 fi
 
-# ---------- 1. neovim + ripgrep (busca de texto do telescope) ----------
-PKGS=(neovim ripgrep)
+# ---------- 1. neovim + ripgrep (telescope) + gcc (compila parsers do treesitter) ----------
+PKGS=(neovim ripgrep gcc)
 if command -v apt-get >/dev/null 2>&1; then
     missing=()
     for p in "${PKGS[@]}"; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
@@ -61,6 +61,13 @@ fi
 # ---------- 3. plugins (lazy.nvim + tokyonight) sem abrir a UI ----------
 info "Sincronizando plugins do neovim"
 nvim --headless "+Lazy! sync" +qa >/dev/null 2>&1 || warn "Lazy sync falhou; abra o nvim e rode :Lazy sync"
+
+info "Compilando parsers do treesitter (pode levar alguns minutos)"
+# TSInstallSync fica preso num prompt ao final; o timeout só mata o processo depois de tudo compilado
+timeout 900 nvim --headless \
+    -c 'lua require("lazy").load({plugins={"nvim-treesitter"}})' \
+    -c 'TSInstallSync typescript tsx javascript html css scss json yaml java python bash lua vim vimdoc markdown markdown_inline regex dockerfile sql' \
+    -c qa >/dev/null 2>&1 || true
 
 # ---------- 4. paleta do terminal ----------
 load_palette tokyonight
