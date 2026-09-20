@@ -28,15 +28,33 @@ if [[ "${1:-}" == "--pastelterm" ]]; then
     exit 0
 fi
 
-# ---------- 1. neovim ----------
-if ! command -v nvim >/dev/null 2>&1; then
-    if command -v apt-get >/dev/null 2>&1; then
-        info "Instalando neovim"
+# ---------- 1. neovim + ripgrep (busca de texto do telescope) ----------
+PKGS=(neovim ripgrep)
+if command -v apt-get >/dev/null 2>&1; then
+    missing=()
+    for p in "${PKGS[@]}"; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
+    if (( ${#missing[@]} )); then
+        info "Instalando pacotes: ${missing[*]}"
         sudo apt-get update -qq
-        sudo apt-get install -y -qq neovim
+        sudo apt-get install -y -qq "${missing[@]}"
     else
-        warn "apt-get não encontrado: instale o neovim manualmente"; exit 1
+        info "Pacotes já instalados: ${PKGS[*]}"
     fi
+else
+    warn "apt-get não encontrado: instale manualmente: ${PKGS[*]}"
+fi
+
+# ---------- 1b. Nerd Font (ícones do nvim-tree) — instalação por usuário, sem sudo ----------
+if fc-list | grep -q "JetBrainsMono Nerd Font"; then
+    info "Nerd Font já instalada"
+else
+    info "Baixando JetBrainsMono Nerd Font"
+    tmp="$(mktemp -d)"
+    curl -fsSL -o "$tmp/f.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+    mkdir -p "$HOME/.local/share/fonts/JetBrainsMonoNerd"
+    tar -xJf "$tmp/f.tar.xz" -C "$HOME/.local/share/fonts/JetBrainsMonoNerd" --wildcards 'JetBrainsMonoNerdFont-*.ttf'
+    fc-cache -f "$HOME/.local/share/fonts"
+    rm -rf "$tmp"
 fi
 
 # ---------- 2. config (symlink ~/.config/nvim -> repo) ----------

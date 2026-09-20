@@ -34,10 +34,28 @@ cd ~/config-shell
 
 O `install-tokyonight.sh`:
 
-1. instala `neovim` (apt)
-2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + `folke/tokyonight.nvim`, estilo `night`, fundo transparente)
-3. baixa os plugins em modo headless (não precisa abrir o editor)
-4. carrega a paleta **Tokyo Night** no gnome-terminal
+1. instala `neovim` e `ripgrep` (apt)
+2. instala a JetBrainsMono **Nerd Font** em `~/.local/share/fonts` (ícones do nvim-tree)
+3. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + nvim-tree + telescope)
+4. baixa os plugins em modo headless (não precisa abrir o editor)
+5. carrega a paleta **Tokyo Night** no gnome-terminal (com a Nerd Font)
+
+#### Atalhos do neovim (`<Space>` é o leader)
+
+| tecla | ação |
+|---|---|
+| `nvim .` | abre o projeto na pasta atual |
+| `Space e` | abre/fecha a árvore de arquivos |
+| `Space E` | árvore posicionada no arquivo atual |
+| `Space ff` | buscar arquivo por nome |
+| `Space fg` | buscar texto no projeto (ripgrep) |
+| `Space fb` | buffers abertos |
+| `Space fr` | arquivos recentes |
+| `Space w` / `Space q` | salvar / fechar |
+| `Ctrl h/j/k/l` | pular entre janelas (árvore ↔ editor) |
+| `Esc` | limpa o destaque da busca |
+
+Na árvore: `Enter` abre, `a` cria, `d` apaga, `r` renomeia, `H` mostra ocultos, `g?` lista tudo.
 
 ### Trocar de paleta depois
 
@@ -91,7 +109,7 @@ Cursor `#c0caf5`, seleção `#283457`/`#c0caf5`. Gerada dos extras oficiais do p
 (`extras/gnome_terminal/` + tons bright de `extras/kitty/`). Pra trocar o estilo (`storm`/`moon`/`day`),
 mude `style` no lua e regere o dconf a partir de `~/.local/share/nvim/lazy/tokyonight.nvim/extras/`.
 
-Ambas: fonte JetBrains Mono 12, `bold-is-bright`.
+Fonte: pastelterm usa JetBrains Mono 12; Tokyo Night usa JetBrainsMono Nerd Font 12. Ambas `bold-is-bright`.
 
 ## Extensões GNOME (instalar via extensions.gnome.org)
 
