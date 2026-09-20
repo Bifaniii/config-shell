@@ -2,16 +2,17 @@
 theme-variant='dark'
 
 [legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
-background-color='#12161a'
+background-color='#1a1b26'
 bold-is-bright=true
-cursor-background-color='#acff9d'
+cursor-background-color='#c0caf5'
 cursor-colors-set=true
-cursor-foreground-color='#12161a'
+cursor-foreground-color='#1a1b26'
 font='JetBrains Mono 12'
-foreground-color='#acff9d'
-highlight-background-color='#2f3d35'
+foreground-color='#c0caf5'
+highlight-background-color='#283457'
 highlight-colors-set=true
-highlight-foreground-color='#f2f4f7'
-palette=['#1b1f24', '#e63939', '#9ece8a', '#e6c384', '#4f86f0', '#b07be0', '#86d3d3', '#d0d3d9', '#5c6370', '#ff2e2e', '#acff9d', '#ffd166', '#6ea0ff', '#c98cf5', '#9be6e6', '#f2f4f7']
+highlight-foreground-color='#c0caf5'
+palette=['#15161e', '#f7768e', '#9ece6a', '#e0af68', '#7aa2f7', '#bb9af7', '#7dcfff', '#a9b1d6', '#414868', '#ff899d', '#9fe044', '#faba4a', '#8db0ff', '#c7a9ff', '#a4daff', '#c0caf5']
 use-system-font=false
 use-theme-colors=false
+visible-name='Tokyo Night'

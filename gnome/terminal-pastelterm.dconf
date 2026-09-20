@@ -1,0 +1,17 @@
+[legacy]
+theme-variant='dark'
+
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+background-color='#12161a'
+bold-is-bright=true
+cursor-background-color='#acff9d'
+cursor-colors-set=true
+cursor-foreground-color='#12161a'
+font='JetBrains Mono 12'
+foreground-color='#acff9d'
+highlight-background-color='#2f3d35'
+highlight-colors-set=true
+highlight-foreground-color='#f2f4f7'
+palette=['#1b1f24', '#e63939', '#9ece8a', '#e6c384', '#4f86f0', '#b07be0', '#86d3d3', '#d0d3d9', '#5c6370', '#ff2e2e', '#acff9d', '#ffd166', '#6ea0ff', '#c98cf5', '#9be6e6', '#f2f4f7']
+use-system-font=false
+use-theme-colors=false
