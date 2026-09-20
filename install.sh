@@ -15,12 +15,19 @@ info() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*"; }
 
 # ---------- 1. pacotes ----------
+PKGS=(zsh vim git curl fonts-jetbrains-mono dconf-cli)
 if command -v apt-get >/dev/null 2>&1; then
-    info "Instalando pacotes (zsh, vim, git, curl, fonte JetBrains Mono, dconf-cli)"
-    sudo apt-get update -qq
-    sudo apt-get install -y -qq zsh vim git curl fonts-jetbrains-mono dconf-cli
+    missing=()
+    for p in "${PKGS[@]}"; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
+    if (( ${#missing[@]} )); then
+        info "Instalando pacotes: ${missing[*]}"
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq "${missing[@]}"
+    else
+        info "Pacotes já instalados: ${PKGS[*]}"
+    fi
 else
-    warn "apt-get não encontrado: instale manualmente zsh vim git curl fonts-jetbrains-mono dconf-cli"
+    warn "apt-get não encontrado: instale manualmente: ${PKGS[*]}"
 fi
 
 # ---------- 2. oh-my-zsh + plugins ----------
