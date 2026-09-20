@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # install.sh — restaura todo o ambiente de terminal (zsh + vim + gnome-terminal + tema)
+# com a paleta PASTELTERM (feita à mão). Pra neovim + Tokyo Night, veja ./install-tokyonight.sh
 # Uso: git clone https://github.com/Bifaniii/config-shell.git && cd config-shell && ./install.sh
 #
 # Os arquivos de config viram SYMLINKS apontando pra dentro deste repo.
@@ -15,7 +16,7 @@ info() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*"; }
 
 # ---------- 1. pacotes ----------
-PKGS=(zsh vim neovim git curl fonts-jetbrains-mono dconf-cli)
+PKGS=(zsh vim git curl fonts-jetbrains-mono dconf-cli)
 if command -v apt-get >/dev/null 2>&1; then
     missing=()
     for p in "${PKGS[@]}"; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
@@ -73,18 +74,11 @@ link zsh/.zshrc                 "$HOME/.zshrc"
 link vim/.vimrc                 "$HOME/.vimrc"
 link vim/colors/pastelterm.vim  "$HOME/.vim/colors/pastelterm.vim"
 link git/.gitconfig             "$HOME/.gitconfig"
-link nvim                       "$HOME/.config/nvim"
-
-# ---------- 4b. neovim: baixa lazy.nvim + tokyonight sem abrir a UI ----------
-if command -v nvim >/dev/null 2>&1; then
-    info "Sincronizando plugins do neovim (lazy.nvim + tokyonight)"
-    nvim --headless "+Lazy! sync" +qa >/dev/null 2>&1 || warn "Lazy sync falhou; abra o nvim e rode :Lazy sync"
-fi
 
 # ---------- 5. gnome-terminal / blur / tema GTK (só se tiver sessão gráfica GNOME) ----------
 if command -v dconf >/dev/null 2>&1 && [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
-    info "Carregando perfil do gnome-terminal (paleta Tokyo Night + JetBrains Mono)"
-    dconf load /org/gnome/terminal/ < "$REPO/gnome/terminal.dconf"
+    info "Carregando perfil do gnome-terminal (paleta pastelterm + JetBrains Mono)"
+    dconf load /org/gnome/terminal/ < "$REPO/gnome/terminal-pastelterm.dconf"
 
     info "Carregando config do blur-my-shell"
     dconf load /org/gnome/shell/extensions/blur-my-shell/ < "$REPO/gnome/blur-my-shell.dconf"
