@@ -42,3 +42,6 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 # Load Angular CLI autocompletion.
 command -v ng >/dev/null 2>&1 && source <(ng completion script)
+
+# vim abre o neovim (config em ~/.config/nvim -> ~/config-shell/nvim)
+command -v nvim >/dev/null 2>&1 && alias vim=nvim

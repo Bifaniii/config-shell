@@ -44,19 +44,6 @@ else
     warn "apt-get não encontrado: instale manualmente: ${PKGS[*]}"
 fi
 
-# ---------- 1b. Nerd Font (ícones do nvim-tree) — instalação por usuário, sem sudo ----------
-if fc-list | grep -q "JetBrainsMono Nerd Font"; then
-    info "Nerd Font já instalada"
-else
-    info "Baixando JetBrainsMono Nerd Font"
-    tmp="$(mktemp -d)"
-    curl -fsSL -o "$tmp/f.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
-    mkdir -p "$HOME/.local/share/fonts/JetBrainsMonoNerd"
-    tar -xJf "$tmp/f.tar.xz" -C "$HOME/.local/share/fonts/JetBrainsMonoNerd" --wildcards 'JetBrainsMonoNerdFont-*.ttf'
-    fc-cache -f "$HOME/.local/share/fonts"
-    rm -rf "$tmp"
-fi
-
 # ---------- 2. config (symlink ~/.config/nvim -> repo) ----------
 dst="$HOME/.config/nvim"
 if [[ -L "$dst" && "$(readlink -f "$dst")" == "$REPO/nvim" ]]; then

@@ -35,10 +35,9 @@ cd ~/config-shell
 O `install-tokyonight.sh`:
 
 1. instala `neovim` e `ripgrep` (apt)
-2. instala a JetBrainsMono **Nerd Font** em `~/.local/share/fonts` (ícones do nvim-tree)
-3. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + nvim-tree + telescope)
-4. baixa os plugins em modo headless (não precisa abrir o editor)
-5. carrega a paleta **Tokyo Night** no gnome-terminal (com a Nerd Font)
+2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + nvim-tree + telescope)
+3. baixa os plugins em modo headless (não precisa abrir o editor)
+4. carrega a paleta **Tokyo Night** no gnome-terminal
 
 #### Atalhos do neovim (`<Space>` é o leader)
 
@@ -69,6 +68,7 @@ Os dois scripts são idempotentes — pode rodar quantas vezes quiser.
 
 ## Manter atualizado
 
+- `vim` é alias de `nvim` (no `.zshrc`); o vim clássico continua acessível como `\vim`.
 - `.zshrc`, `.vimrc`, `pastelterm.vim`, `.gitconfig`, `nvim/` são symlinks: edite normalmente e `git commit`.
 - Cores/fonte do gnome-terminal, blur e tema GTK vivem no dconf e não dá pra symlinkar:
   depois de mexer, rode `./backup.sh` (ele detecta qual paleta está ativa e exporta pro arquivo certo) e faça commit.
@@ -109,7 +109,7 @@ Cursor `#c0caf5`, seleção `#283457`/`#c0caf5`. Gerada dos extras oficiais do p
 (`extras/gnome_terminal/` + tons bright de `extras/kitty/`). Pra trocar o estilo (`storm`/`moon`/`day`),
 mude `style` no lua e regere o dconf a partir de `~/.local/share/nvim/lazy/tokyonight.nvim/extras/`.
 
-Fonte: pastelterm usa JetBrains Mono 12; Tokyo Night usa JetBrainsMono Nerd Font 12. Ambas `bold-is-bright`.
+Ambas: fonte JetBrains Mono 12, `bold-is-bright`.
 
 ## Extensões GNOME (instalar via extensions.gnome.org)
 

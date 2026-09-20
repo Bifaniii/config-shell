@@ -7,14 +7,18 @@
 return {
   {
     "nvim-tree/nvim-tree.lua",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
       { "<leader>e", "<cmd>NvimTreeToggle<cr>",   desc = "Árvore de arquivos" },
       { "<leader>E", "<cmd>NvimTreeFindFile<cr>", desc = "Árvore: ir pro arquivo atual" },
     },
     opts = {
       view = { width = 32 },
-      renderer = { indent_markers = { enable = true }, group_empty = true },
+      renderer = {
+        indent_markers = { enable = true },
+        group_empty = true,
+        -- sem Nerd Font: desliga os ícones (senão viram quadradinhos)
+        icons = { show = { file = false, folder = false, folder_arrow = false, git = false } },
+      },
       filters = { dotfiles = false, custom = { "^.git$" } },
       update_focused_file = { enable = true },
     },
