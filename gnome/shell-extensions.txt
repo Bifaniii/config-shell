@@ -1,0 +1,5 @@
+upower-battery@codilia.com
+blur-my-shell@aunetx
+dash-to-dock@micxgx.gmail.com
+quick-settings-tweaks@qwreey
+user-theme@gnome-shell-extensions.gcampax.github.com
