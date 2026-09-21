@@ -1,0 +1,18 @@
+[legacy]
+theme-variant='dark'
+
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+background-color='#282a36'
+bold-is-bright=true
+cursor-background-color='#f8f8f2'
+cursor-colors-set=true
+cursor-foreground-color='#282a36'
+font='JetBrains Mono 12'
+foreground-color='#f8f8f2'
+highlight-background-color='#44475a'
+highlight-colors-set=true
+highlight-foreground-color='#f8f8f2'
+palette=['#21222c', '#ff5555', '#50fa7b', '#f1fa8c', '#bd93f9', '#ff79c6', '#8be9fd', '#f8f8f2', '#6272a4', '#ff6e6e', '#69ff94', '#ffffa5', '#d6acff', '#ff92df', '#a4ffff', '#ffffff']
+use-system-font=false
+use-theme-colors=false
+visible-name='Dracula'

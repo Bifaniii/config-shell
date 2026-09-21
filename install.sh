@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # install.sh — restaura todo o ambiente de terminal (zsh + vim + gnome-terminal + tema)
-# com a paleta PASTELTERM (feita à mão). Pra neovim + Tokyo Night, veja ./install-tokyonight.sh
+# com a paleta PASTELTERM (feita à mão). Pra neovim + Dracula, veja ./install-dracula.sh
 # Uso: git clone https://github.com/Bifaniii/config-shell.git && cd config-shell && ./install.sh
 #
 # Os arquivos de config viram SYMLINKS apontando pra dentro deste repo.

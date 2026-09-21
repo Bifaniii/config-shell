@@ -7,7 +7,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # descobre qual paleta está ativa pelo fundo e exporta pro arquivo certo
 case "$(dconf read /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-color)" in
     "'#12161a'") palette=pastelterm ;;
-    "'#1a1b26'") palette=tokyonight ;;
+    "'#282a36'") palette=dracula ;;
     *) echo "Fundo do terminal não bate com nenhuma paleta conhecida; exportando pra gnome/terminal-custom.dconf"; palette=custom ;;
 esac
 echo "Paleta ativa: $palette"

@@ -1,7 +1,8 @@
 " --- Interface e Cores ---
 syntax on                       " Ativa o realce de sintaxe em cores
-colorscheme pastelterm          " Paleta igual à do gnome-terminal (~/.vim/colors/pastelterm.vim)
 set termguicolors               " Melhora a fidelidade de cores no terminal (True Color)
+let g:dracula_colorterm = 0      " fundo transparente (blur do terminal)
+colorscheme dracula             " ~/.vim/pack/themes/start/dracula (pastelterm.vim continua disponível)
 set number                      " Mostra o número das linhas na lateral
 
 " --- Indentação e Comportamento ---

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# install-tokyonight.sh — OPCIONAL. Instala o neovim com o tema Tokyo Night e troca a paleta
-# do gnome-terminal pra mesma do tema. Rode depois do ./install.sh (ou sozinho, se só quiser o nvim).
+# install-dracula.sh — OPCIONAL. Instala o neovim com o tema Dracula e troca a paleta
+# do gnome-terminal pra oficial do Dracula (mesmas cores do VS Code). Rode depois do ./install.sh (ou sozinho, se só quiser o nvim).
 #
-# Voltar pra paleta pastelterm:  ./install-tokyonight.sh --pastelterm
+# Voltar pra paleta pastelterm:  ./install-dracula.sh --pastelterm
 # (só troca as cores do terminal; o neovim continua instalado)
 
 set -euo pipefail
@@ -13,7 +13,7 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 info() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*"; }
 
-load_palette() {  # load_palette <pastelterm|tokyonight>
+load_palette() {  # load_palette <pastelterm|dracula>
     if command -v dconf >/dev/null 2>&1 && [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
         info "Carregando paleta $1 no gnome-terminal"
         dconf load /org/gnome/terminal/ < "$REPO/gnome/terminal-$1.dconf"
@@ -58,7 +58,7 @@ else
     info "Link criado: $dst -> $REPO/nvim"
 fi
 
-# ---------- 3. plugins (lazy.nvim + tokyonight) sem abrir a UI ----------
+# ---------- 3. plugins (lazy.nvim + dracula) sem abrir a UI ----------
 info "Sincronizando plugins do neovim"
 nvim --headless "+Lazy! sync" +qa >/dev/null 2>&1 || warn "Lazy sync falhou; abra o nvim e rode :Lazy sync"
 
@@ -70,6 +70,6 @@ timeout 900 nvim --headless \
     -c qa >/dev/null 2>&1 || true
 
 # ---------- 4. paleta do terminal ----------
-load_palette tokyonight
+load_palette dracula
 
 info "Pronto. Abra um terminal novo e rode: nvim"

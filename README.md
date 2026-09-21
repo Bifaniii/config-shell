@@ -1,7 +1,7 @@
 # config-shell
 
 Meu ambiente de terminal completo: zsh + oh-my-zsh, vim, gnome-terminal, blur-my-shell e tema WhiteSur.
-Duas paletas de cores disponíveis: **pastelterm** (feita à mão, padrão) e **Tokyo Night** (opcional, com neovim).
+Duas paletas de cores disponíveis: **pastelterm** (feita à mão, padrão) e **Dracula** (opcional, com neovim — mesmas cores do Dracula do VS Code).
 
 ## Instalar
 
@@ -23,23 +23,23 @@ O `install.sh`:
 5. carrega no dconf: gnome-terminal com paleta **pastelterm**, blur-my-shell, tema GTK/ícones (instala WhiteSur se faltar)
 6. define zsh como shell padrão
 
-### Opção 2 — Tokyo Night + neovim
+### Opção 2 — Dracula + neovim
 
 ```bash
 git clone https://github.com/Bifaniii/config-shell.git ~/config-shell
 cd ~/config-shell
 ./install.sh              # ambiente base (zsh, vim, blur, tema...)
-./install-tokyonight.sh   # neovim + tema Tokyo Night + paleta do terminal igual ao tema
+./install-dracula.sh      # neovim + tema Dracula + paleta do terminal igual ao tema
 ```
 
-O `install-tokyonight.sh`:
+O `install-dracula.sh`:
 
 1. instala `neovim`, `ripgrep` e `gcc` (apt)
-2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + tokyonight + treesitter + nvim-tree + telescope)
+2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + dracula.nvim + treesitter + nvim-tree + telescope)
 3. baixa os plugins e compila os parsers do treesitter em modo headless (não precisa abrir o editor)
-4. carrega a paleta **Tokyo Night** no gnome-terminal
+4. carrega a paleta **Dracula** no gnome-terminal
 
-> Sem o treesitter o neovim usa o realce antigo do vim (regex) e o Tokyo Night fica quase monocromático.
+> Sem o treesitter o neovim usa o realce antigo do vim (regex) e o tema fica quase monocromático.
 > Abriu um tipo de arquivo novo? O parser é baixado sozinho (`auto_install`).
 
 #### Atalhos do neovim (`<Space>` é o leader)
@@ -62,8 +62,8 @@ Na árvore: `Enter` abre, `a` cria, `d` apaga, `r` renomeia, `H` mostra ocultos,
 ### Trocar de paleta depois
 
 ```bash
-./install-tokyonight.sh --pastelterm                                  # volta pro pastelterm (nvim continua)
-dconf load /org/gnome/terminal/ < gnome/terminal-tokyonight.dconf     # ou direto no dconf
+./install-dracula.sh --pastelterm                                     # volta pro pastelterm (nvim continua)
+dconf load /org/gnome/terminal/ < gnome/terminal-dracula.dconf        # ou direto no dconf
 dconf load /org/gnome/terminal/ < gnome/terminal-pastelterm.dconf
 ```
 
@@ -94,23 +94,22 @@ Os dois scripts são idempotentes — pode rodar quantas vezes quiser.
 
 Cursor `#acff9d`, seleção `#2f3d35`/`#f2f4f7`. O `pastelterm.vim` usa fundo `NONE` pra deixar o blur aparecer.
 
-### Tokyo Night (night) — `gnome/terminal-tokyonight.dconf` + `nvim/lua/plugins/tokyonight.lua`
+### Dracula — `gnome/terminal-dracula.dconf` + `nvim/lua/plugins/dracula.lua` + `.vimrc`
 
 | | normal | bright |
 |---|---|---|
-| fundo / texto | `#1a1b26` / `#c0caf5` | |
-| black | `#15161e` | `#414868` |
-| red | `#f7768e` | `#ff899d` |
-| green | `#9ece6a` | `#9fe044` |
-| yellow | `#e0af68` | `#faba4a` |
-| blue | `#7aa2f7` | `#8db0ff` |
-| magenta | `#bb9af7` | `#c7a9ff` |
-| cyan | `#7dcfff` | `#a4daff` |
-| white | `#a9b1d6` | `#c0caf5` |
+| fundo / texto | `#282a36` / `#f8f8f2` | |
+| black | `#21222c` | `#6272a4` |
+| red | `#ff5555` | `#ff6e6e` |
+| green | `#50fa7b` | `#69ff94` |
+| yellow | `#f1fa8c` | `#ffffa5` |
+| blue | `#bd93f9` | `#d6acff` |
+| magenta | `#ff79c6` | `#ff92df` |
+| cyan | `#8be9fd` | `#a4ffff` |
+| white | `#f8f8f2` | `#ffffff` |
 
-Cursor `#c0caf5`, seleção `#283457`/`#c0caf5`. Gerada dos extras oficiais do plugin
-(`extras/gnome_terminal/` + tons bright de `extras/kitty/`). Pra trocar o estilo (`storm`/`moon`/`day`),
-mude `style` no lua e regere o dconf a partir de `~/.local/share/nvim/lazy/tokyonight.nvim/extras/`.
+Cursor `#f8f8f2`, seleção `#44475a`/`#f8f8f2`. Paleta oficial do [dracula/gnome-terminal](https://github.com/dracula/gnome-terminal).
+No neovim: `Mofiqul/dracula.nvim`; no vim clássico: `dracula/vim` (`g:dracula_colorterm = 0` = fundo transparente).
 
 Ambas: fonte JetBrains Mono 12, `bold-is-bright`.
 

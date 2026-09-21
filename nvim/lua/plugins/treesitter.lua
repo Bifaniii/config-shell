@@ -1,4 +1,4 @@
--- Realce de sintaxe real (parser, não regex). É o que faz o tokyonight ficar
+-- Realce de sintaxe real (parser, não regex). É o que faz o Dracula ficar
 -- com as cores das screenshots: sem isso o nvim usa o syntax antigo do vim.
 return {
   "nvim-treesitter/nvim-treesitter",
