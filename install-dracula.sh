@@ -43,12 +43,26 @@ link nvim "$HOME/.config/nvim"
 info "Sincronizando plugins do neovim"
 nvim --headless "+Lazy! sync" +qa >/dev/null 2>&1 || warn "Lazy sync falhou; abra o nvim e rode :Lazy sync"
 
-info "Compilando parsers do treesitter (pode levar alguns minutos)"
-# TSInstallSync fica preso num prompt ao final; o timeout só mata o processo depois de tudo compilado
-timeout 900 nvim --headless \
-    -c 'lua require("lazy").load({plugins={"nvim-treesitter"}})' \
-    -c 'TSInstallSync typescript tsx javascript html css scss json yaml java python bash lua vim vimdoc markdown markdown_inline regex dockerfile sql' \
-    -c qa >/dev/null 2>&1 || true
+info "Instalando parsers do treesitter que faltarem (compila com gcc)"
+# TSInstallSync trava pedindo confirmação se o parser já existe, então instalamos
+# só os que faltam; se não faltar nenhum, sai na hora.
+timeout 900 nvim --headless -c 'lua
+require("lazy").load({plugins={"nvim-treesitter"}})
+local want = {"typescript","tsx","javascript","html","css","scss","json","yaml",
+              "java","python","bash","lua","vim","vimdoc","markdown","markdown_inline",
+              "regex","dockerfile","sql"}
+local have = require("nvim-treesitter.info").installed_parsers()
+local missing = {}
+for _, p in ipairs(want) do
+  if not vim.tbl_contains(have, p) then missing[#missing+1] = p end
+end
+if #missing > 0 then
+  print("Compilando: " .. table.concat(missing, " "))
+  vim.cmd("TSInstallSync " .. table.concat(missing, " "))
+else
+  print("Todos os parsers já instalados")
+end
+os.exit(0)' </dev/null || warn "Parsers falharam; abra o nvim e rode :TSUpdate"
 
 # ---------- paleta do terminal ----------
 load_palette dracula
