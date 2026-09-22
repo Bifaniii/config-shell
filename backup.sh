@@ -34,14 +34,17 @@ if has_gui; then
         dconf dump /org/gtk/gtk4/settings/
     } > "$REPO/gnome/gtk.dconf"
     # todas as instaladas (ativas ou não); quais ficam ativas vem do shell.dconf
-    { ls "$HOME/.local/share/gnome-shell/extensions" 2>/dev/null
-      ls /usr/share/gnome-shell/extensions 2>/dev/null; } | sort -u > "$REPO/gnome/shell-extensions.txt"
+    { ls "$HOME/.local/share/gnome-shell/extensions" 2>/dev/null || true
+      ls /usr/share/gnome-shell/extensions 2>/dev/null || true; } | sort -u > "$REPO/gnome/shell-extensions.txt"
     info "dconf exportado"
 
     step "Configs de apps"
-    [[ -f "$HOME/.config/flameshot/flameshot.ini" ]] && cp "$HOME/.config/flameshot/flameshot.ini" "$REPO/flameshot/"
-    [[ -f "$HOME/.config/Code/User/settings.json" ]] && cp "$HOME/.config/Code/User/settings.json" "$REPO/vscode/"
-    info "flameshot e VS Code"
+    if [[ -f "$HOME/.config/flameshot/flameshot.ini" ]]; then
+        cp "$HOME/.config/flameshot/flameshot.ini" "$REPO/flameshot/"; info "flameshot.ini"
+    fi
+    if [[ -f "$HOME/.config/Code/User/settings.json" ]]; then
+        cp "$HOME/.config/Code/User/settings.json" "$REPO/vscode/"; info "VS Code settings.json"
+    fi
 else
     warn "Sem sessão GNOME: pulando dconf"
 fi
@@ -52,7 +55,7 @@ if command -v flatpak >/dev/null 2>&1; then
     info "flatpak.txt ($(wc -l < "$REPO/packages/flatpak.txt") apps)"
 fi
 if command -v code >/dev/null 2>&1; then
-    code --list-extensions > "$REPO/packages/vscode-extensions.txt" 2>/dev/null
+    code --list-extensions > "$REPO/packages/vscode-extensions.txt" 2>/dev/null || true
     info "vscode-extensions.txt ($(wc -l < "$REPO/packages/vscode-extensions.txt") extensões)"
 fi
 if [[ -d "$HOME/.sdkman/candidates" ]]; then
@@ -66,11 +69,18 @@ if [[ -d "$HOME/.sdkman/candidates" ]]; then
     } > "$REPO/packages/sdkman.txt"
     info "sdkman.txt"
 fi
-if [[ -d "$HOME/.npm-global/lib/node_modules" ]]; then
-    find "$HOME/.npm-global/lib/node_modules" -maxdepth 2 -name package.json -not -path '*/node_modules/*/node_modules/*' \
-        -exec sh -c 'grep -m1 "\"name\"" "$1" | sed "s/.*: *\"//;s/\".*//"' _ {} \; 2>/dev/null \
-        | sort -u > "$REPO/packages/npm-global.txt"
-    info "npm-global.txt"
+NPM_ROOT="$HOME/.npm-global/lib/node_modules"
+if [[ -d "$NPM_ROOT" ]]; then
+    # pacotes com escopo (@angular/cli) ficam um nível mais fundo que os normais
+    for d in "$NPM_ROOT"/*/; do
+        n="$(basename "$d")"
+        case "$n" in
+            npm) ;;                                   # o próprio npm não conta
+            @*) for sub in "$d"*/; do echo "$n/$(basename "$sub")"; done ;;
+            *) echo "$n" ;;
+        esac
+    done | sort -u > "$REPO/packages/npm-global.txt"
+    info "npm-global.txt ($(wc -l < "$REPO/packages/npm-global.txt") pacotes)"
 fi
 
 warn "packages/apt.txt é curado à mão (não sobrescrito). Instalou algo novo com apt? Adicione lá."

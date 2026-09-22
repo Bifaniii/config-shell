@@ -113,10 +113,20 @@ if ! dpkg --print-foreign-architectures | grep -q i386; then
     sudo dpkg --add-architecture i386
 fi
 
-# non-free-firmware / contrib (Steam, drivers)
-if ! grep -rq 'contrib' /etc/apt/sources.list /etc/apt/sources.list.d/debian.sources 2>/dev/null; then
-    info "Adicionando componentes contrib e non-free-firmware"
-    sudo sed -i 's/^Components: main$/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true
+# contrib / non-free / non-free-firmware (Steam, Wine, drivers)
+# Debian usa dois formatos: o clássico /etc/apt/sources.list e o deb822 debian.sources.
+has_contrib() {
+    { cat /etc/apt/sources.list /etc/apt/sources.list.d/debian.sources; } 2>/dev/null | grep -q contrib
+}
+if has_contrib; then
+    info "Componentes contrib/non-free já habilitados"
+else
+    info "Habilitando componentes contrib, non-free e non-free-firmware"
+    if [[ -f /etc/apt/sources.list.d/debian.sources ]]; then
+        sudo sed -i -E 's/^(Components:.*)$/\1 contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources
+    elif [[ -f /etc/apt/sources.list ]]; then
+        sudo sed -i -E '/^deb(-src)? .*debian/ s/ main( |$)/ main contrib non-free non-free-firmware /' /etc/apt/sources.list
+    fi
 fi
 
 info "Atualizando índices do apt"
