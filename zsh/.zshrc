@@ -18,20 +18,26 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_SPACE
 
-# ---------- Lazy NVM ----------
-export NVM_DIR="$HOME/.nvm"
+# ---------- SDKMAN (Java, Maven) ----------
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
-load-nvm() {
-    unset -f node npm npx nvm
-    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-}
+# ---------- NVM (lazy: só carrega no primeiro node/npm/npx/nvm) ----------
+# O node do dia a dia vem do apt (NodeSource). O nvm só entra se estiver instalado.
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 
-for cmd in node npm npx nvm; do
-    eval "$cmd() {
-        load-nvm
-        command $cmd \"\$@\"
-    }"
-done
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+    load-nvm() {
+        unset -f node npm npx nvm
+        source "$NVM_DIR/nvm.sh"
+    }
+    for cmd in node npm npx nvm; do
+        eval "$cmd() {
+            load-nvm
+            command $cmd \"\$@\"
+        }"
+    done
+fi
 
 # Local bin
 export PATH="$HOME/.local/bin:$PATH"

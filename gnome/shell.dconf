@@ -1,0 +1,64 @@
+[/]
+disabled-extensions=['Bluetooth-Battery-Meter@maniacx.github.com', 'blur-my-shell@aunetx']
+enabled-extensions=['upower-battery@codilia.com', 'dash-to-dock@micxgx.gmail.com', 'quick-settings-tweaks@qwreey', 'user-theme@gnome-shell-extensions.gcampax.github.com']
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.gnome.Calculator.desktop', 'google-chrome.desktop', 'com.discordapp.Discord.desktop', 'com.anthropic.Claude.desktop', 'com.jetbrains.IntelliJ-IDEA-Community.desktop', 'postman.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'spotify.desktop']
+last-selected-power-profile='power-saver'
+
+[extensions/Bluetooth-Battery-Meter]
+circle-widget-custom-colors=['#ff7800', '#ff7800', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931']
+level-indicator-custom-colors=['#ff7800', '#ff7800', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931', '#15c931']
+swap-icon-text=false
+
+[extensions/blur-my-shell]
+rounded-blur-found=false
+settings-version=2
+
+[extensions/blur-my-shell/appfolder]
+brightness=0.59999999999999998
+sigma=30
+
+[extensions/blur-my-shell/applications]
+blur=true
+dynamic-opacity=false
+opacity=205
+sigma=30
+whitelist=['gnome-terminal-server', 'Gnome-terminal']
+
+[extensions/blur-my-shell/dash-to-dock]
+blur=true
+brightness=0.59999999999999998
+sigma=30
+static-blur=true
+style-dash-to-dock=0
+
+[extensions/blur-my-shell/panel]
+brightness=0.59999999999999998
+corner-radius=0
+sigma=30
+
+[extensions/blur-my-shell/window-list]
+brightness=0.59999999999999998
+sigma=30
+
+[extensions/dash-to-dock]
+background-opacity=0.80000000000000004
+dash-max-icon-size=48
+dock-position='BOTTOM'
+height-fraction=0.90000000000000002
+multi-monitor=true
+preferred-monitor=-2
+preferred-monitor-by-connector='eDP'
+
+[extensions/quick-settings-tweaks]
+media-compact=true
+
+[extensions/user-theme]
+name='WhiteSur-Dark'
+
+[keybindings]
+show-screenshot-ui=@as []
+
+[weather]
+automatic-location=true
+
+[world-clocks]

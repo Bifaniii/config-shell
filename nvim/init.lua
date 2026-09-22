@@ -40,3 +40,5 @@ require("lazy").setup("plugins", {
   install = { colorscheme = { "dracula" } },
   change_detection = { notify = false },
 })
+
+vim.opt.clipboard="unnamedplus"

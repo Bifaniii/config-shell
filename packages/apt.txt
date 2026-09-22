@@ -1,0 +1,74 @@
+# Pacotes instalados via apt. Linhas com # são ignoradas.
+# Repos de terceiros (docker, vscode, chrome, node, mysql, pgadmin, spotify, anydesk)
+# são adicionados antes pelo packages/apt-repos.sh.
+
+# --- shell e terminal ---
+zsh
+vim
+vim-gtk3
+neovim
+git
+curl
+wget
+bat
+ripgrep
+fastfetch
+bash-completion
+fonts-jetbrains-mono
+dconf-cli
+xclip
+wl-clipboard
+
+# --- build / dev ---
+build-essential
+gcc
+zlib1g-dev
+equivs
+openjdk-21-jdk
+maven
+nodejs
+lua5.4
+luarocks
+sassc
+sqlite3
+sqlitebrowser
+
+# --- bancos de dados ---
+mysql-server
+mysql-client
+postgresql
+pgadmin4
+pgadmin4-desktop
+
+# --- containers ---
+docker-ce
+docker-ce-cli
+containerd.io
+docker-buildx-plugin
+docker-compose-plugin
+
+# --- apps ---
+google-chrome-stable
+code
+spotify-client
+anydesk
+flameshot
+flatpak
+steam-installer
+wine
+gamemode
+ani-cli
+
+# --- rede e utilitários ---
+openssh-client
+bind9-dnsutils
+inetutils-telnet
+traceroute
+nftables
+lsof
+usbutils
+adb
+dosfstools
+f3
+alsa-utils
+nano

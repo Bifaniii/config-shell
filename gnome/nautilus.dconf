@@ -1,0 +1,8 @@
+[preferences]
+default-folder-viewer='icon-view'
+migrated-gtk-settings=true
+search-filter-time-type='last_modified'
+
+[window-state]
+initial-size=(890, 532)
+initial-size-file-chooser=(890, 550)

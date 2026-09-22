@@ -2,7 +2,8 @@
 theme-variant='dark'
 
 [legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
-background-color='#282a36'
+background-color='#01020b'
+bold-color-same-as-fg=true
 bold-is-bright=true
 cursor-background-color='#f8f8f2'
 cursor-colors-set=true

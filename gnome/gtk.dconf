@@ -1,0 +1,16 @@
+[color-chooser]
+
+[file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=183
+sort-column='name'
+sort-directories-first=false
+sort-order='ascending'
+type-format='category'
+[file-chooser]
+show-hidden=true
+sort-directories-first=false

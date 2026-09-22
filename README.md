@@ -1,11 +1,7 @@
 # config-shell
 
-Meu ambiente de terminal completo: zsh + oh-my-zsh, vim, gnome-terminal, blur-my-shell e tema WhiteSur.
-Duas paletas de cores disponíveis: **pastelterm** (feita à mão, padrão) e **Dracula** (opcional, com neovim — mesmas cores do Dracula do VS Code).
-
-## Instalar
-
-### Opção 1 — pastelterm (padrão)
+Minha máquina inteira num repositório: programas, dotfiles, ambiente GNOME e temas.
+Numa máquina nova (Debian 13 / GNOME), um `git clone` + `./install.sh` reconstrói tudo.
 
 ```bash
 git clone https://github.com/Bifaniii/config-shell.git ~/config-shell
@@ -13,92 +9,99 @@ cd ~/config-shell
 ./install.sh
 ```
 
-O `install.sh`:
+> Demora bastante e baixa vários GB (Chrome, VS Code, Docker, MySQL, Android Studio, Steam...).
+> Pra só restaurar as configurações, sem instalar programas: `./install.sh --no-apps`.
 
-1. instala `zsh vim git curl fonts-jetbrains-mono dconf-cli` (apt)
-2. instala oh-my-zsh + plugins `zsh-autosuggestions` e `zsh-syntax-highlighting`
-3. clona os temas dracula e monokai do vim
-4. cria **symlinks** `~/.zshrc`, `~/.vimrc`, `~/.vim/colors/pastelterm.vim`, `~/.gitconfig` → este repo
-   (arquivos existentes viram `*.bak-<data>`)
-5. carrega no dconf: gnome-terminal com paleta **pastelterm**, blur-my-shell, tema GTK/ícones (instala WhiteSur se faltar)
-6. define zsh como shell padrão
+## Flags do install.sh
 
-### Opção 2 — Dracula + neovim
+| flag | efeito |
+|---|---|
+| `--no-apps` | pula a instalação de programas; instala só o mínimo e restaura as configs |
+| `--no-desktop` | pula o ambiente GNOME (tema, wallpaper, atalhos, extensões) |
+| `--pastelterm` | usa a paleta **pastelterm** no terminal em vez da **Dracula** |
 
-```bash
-git clone https://github.com/Bifaniii/config-shell.git ~/config-shell
-cd ~/config-shell
-./install.sh              # ambiente base (zsh, vim, blur, tema...)
-./install-dracula.sh      # neovim + tema Dracula + paleta do terminal igual ao tema
+## Scripts
+
+Cada etapa também roda sozinha:
+
+| script | o que faz |
+|---|---|
+| `install.sh` | orquestra tudo (chama os três abaixo) |
+| `install-apps.sh` | apt + repos de terceiros, flatpak, SDKMAN, npm global, extensões do VS Code |
+| `install-desktop.sh` | tema WhiteSur, wallpapers, atalhos, dash-to-dock, blur, nautilus, GTK |
+| `install-dracula.sh` | neovim + tema Dracula + paleta do terminal (`--pastelterm` volta as cores) |
+| `backup.sh` | re-exporta pro repo tudo que não é symlink (dconf, listas de pacotes, configs de apps) |
+
+## O que está versionado
+
+```
+packages/     apt.txt (curado à mão), apt-repos.sh, flatpak.txt, sdkman.txt,
+              npm-global.txt, vscode-extensions.txt
+gnome/        terminal-dracula.dconf, terminal-pastelterm.dconf, interface, desktop,
+              shell, nautilus, gtk, keybindings-*, shell-extensions.txt
+zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvim)
+vim/          .vimrc + colors/pastelterm.vim
+nvim/         init.lua + lua/plugins/ (lazy.nvim, dracula, treesitter, nvim-tree, telescope)
+git/          .gitconfig
+vscode/       settings.json
+flameshot/    flameshot.ini
+wallpapers/   papéis de parede
+lib/          common.sh (funções compartilhadas pelos scripts)
 ```
 
-O `install-dracula.sh`:
+### Dotfiles são symlinks
 
-1. instala `neovim`, `ripgrep` e `gcc` (apt)
-2. symlink `~/.config/nvim` → `nvim/` deste repo (lazy.nvim + dracula.nvim + treesitter + nvim-tree + telescope)
-3. baixa os plugins e compila os parsers do treesitter em modo headless (não precisa abrir o editor)
-4. carrega a paleta **Dracula** no gnome-terminal
+`~/.zshrc`, `~/.vimrc`, `~/.vim/colors/pastelterm.vim`, `~/.gitconfig` e `~/.config/nvim`
+apontam pra dentro deste repo. Editou? O repo já reflete — só `git commit`.
+Arquivos que existiam antes viram `*.bak-<data>`.
 
-> Sem o treesitter o neovim usa o realce antigo do vim (regex) e o tema fica quase monocromático.
-> Abriu um tipo de arquivo novo? O parser é baixado sozinho (`auto_install`).
+### O resto vai pelo backup.sh
 
-#### Atalhos do neovim (`<Space>` é o leader)
+dconf, listas de pacotes e configs de apps não dão pra symlinkar. Depois de mexer no sistema:
+
+```bash
+./backup.sh          # exporta tudo e mostra o diff
+git add -A && git commit -m "update" && git push
+```
+
+`packages/apt.txt` é curado à mão — instalou algo novo com `apt`? Adicione lá.
+
+## Programas instalados
+
+**Dev:** git, build-essential, openjdk-21 + Maven (via SDKMAN: Java 21.0.5-tem, Maven 3.9.16),
+Node 24 (NodeSource) + Angular CLI, lua/luarocks, sassc, Docker CE + compose, VS Code, IntelliJ IDEA
+e Android Studio (flatpak).
+**Bancos:** MySQL 8.4 LTS, PostgreSQL, pgAdmin 4, DBeaver (flatpak), sqlitebrowser.
+**Apps:** Chrome, Spotify, Discord (flatpak), AnyDesk, Steam, Wine, Flameshot, Extension Manager.
+**Terminal:** zsh + oh-my-zsh (robbyrussell, autosuggestions, syntax-highlighting), vim, neovim,
+bat, ripgrep, fastfetch, xclip/wl-clipboard.
+
+## Neovim
+
+Config em `nvim/`, gerenciada pelo lazy.nvim. Tema **Dracula**, realce via treesitter,
+árvore de arquivos (nvim-tree) e busca fuzzy (telescope). `vim` é alias de `nvim`;
+o vim clássico continua acessível como `\vim`.
 
 | tecla | ação |
 |---|---|
 | `nvim .` | abre o projeto na pasta atual |
-| `Space e` | abre/fecha a árvore de arquivos |
-| `Space E` | árvore posicionada no arquivo atual |
+| `Space e` / `Space E` | árvore de arquivos / árvore no arquivo atual |
 | `Space ff` | buscar arquivo por nome |
 | `Space fg` | buscar texto no projeto (ripgrep) |
-| `Space fb` | buffers abertos |
-| `Space fr` | arquivos recentes |
+| `Space fb` / `Space fr` | buffers abertos / arquivos recentes |
 | `Space w` / `Space q` | salvar / fechar |
-| `Ctrl h/j/k/l` | pular entre janelas (árvore ↔ editor) |
+| `Ctrl h/j/k/l` | pular entre janelas |
 | `Esc` | limpa o destaque da busca |
 
 Na árvore: `Enter` abre, `a` cria, `d` apaga, `r` renomeia, `H` mostra ocultos, `g?` lista tudo.
 
-### Trocar de paleta depois
+## Paletas do terminal
 
-```bash
-./install-dracula.sh --pastelterm                                     # volta pro pastelterm (nvim continua)
-dconf load /org/gnome/terminal/ < gnome/terminal-dracula.dconf        # ou direto no dconf
-dconf load /org/gnome/terminal/ < gnome/terminal-pastelterm.dconf
-```
-
-Os dois scripts são idempotentes — pode rodar quantas vezes quiser.
-
-## Manter atualizado
-
-- `vim` é alias de `nvim` (no `.zshrc`); o vim clássico continua acessível como `\vim`.
-- `.zshrc`, `.vimrc`, `pastelterm.vim`, `.gitconfig`, `nvim/` são symlinks: edite normalmente e `git commit`.
-- Cores/fonte do gnome-terminal, blur e tema GTK vivem no dconf e não dá pra symlinkar:
-  depois de mexer, rode `./backup.sh` (ele detecta qual paleta está ativa e exporta pro arquivo certo) e faça commit.
-
-## Paletas
-
-### pastelterm — `gnome/terminal-pastelterm.dconf` + `vim/colors/pastelterm.vim`
+### Dracula (ativa) — `gnome/terminal-dracula.dconf`
 
 | | normal | bright |
 |---|---|---|
-| fundo / texto | `#12161a` / `#acff9d` | |
-| black | `#1b1f24` | `#5c6370` |
-| red | `#e63939` | `#ff2e2e` |
-| green | `#9ece8a` | `#acff9d` |
-| yellow | `#e6c384` | `#ffd166` |
-| blue | `#4f86f0` | `#6ea0ff` |
-| magenta | `#b07be0` | `#c98cf5` |
-| cyan | `#86d3d3` | `#9be6e6` |
-| white | `#d0d3d9` | `#f2f4f7` |
-
-Cursor `#acff9d`, seleção `#2f3d35`/`#f2f4f7`. O `pastelterm.vim` usa fundo `NONE` pra deixar o blur aparecer.
-
-### Dracula — `gnome/terminal-dracula.dconf` + `nvim/lua/plugins/dracula.lua` + `.vimrc`
-
-| | normal | bright |
-|---|---|---|
-| fundo / texto | `#282a36` / `#f8f8f2` | |
+| fundo / texto | `#01020b` / `#f8f8f2` | |
 | black | `#21222c` | `#6272a4` |
 | red | `#ff5555` | `#ff6e6e` |
 | green | `#50fa7b` | `#69ff94` |
@@ -108,11 +111,28 @@ Cursor `#acff9d`, seleção `#2f3d35`/`#f2f4f7`. O `pastelterm.vim` usa fundo `N
 | cyan | `#8be9fd` | `#a4ffff` |
 | white | `#f8f8f2` | `#ffffff` |
 
-Cursor `#f8f8f2`, seleção `#44475a`/`#f8f8f2`. Paleta oficial do [dracula/gnome-terminal](https://github.com/dracula/gnome-terminal).
-No neovim: `Mofiqul/dracula.nvim`; no vim clássico: `dracula/vim` (`g:dracula_colorterm = 0` = fundo transparente).
+Paleta oficial do [dracula/gnome-terminal](https://github.com/dracula/gnome-terminal), com o fundo
+escurecido à mão (`#01020b`) e `bold-color-same-as-fg`. Seleção `#44475a`, cursor `#f8f8f2`.
 
-Ambas: fonte JetBrains Mono 12, `bold-is-bright`.
+### pastelterm — `gnome/terminal-pastelterm.dconf` + `vim/colors/pastelterm.vim`
 
-## Extensões GNOME (instalar via extensions.gnome.org)
+Paleta feita à mão, fundo `#12161a`, texto `#acff9d`. Trocar: `./install-dracula.sh --pastelterm`.
 
-Lista em `gnome/shell-extensions.txt`. As que importam pro visual do terminal: `blur-my-shell`, `user-theme`.
+Ambas: JetBrains Mono 12, `bold-is-bright`.
+
+## Ambiente GNOME
+
+Tema **WhiteSur-Dark** (GTK + ícones, clonado do GitHub na instalação), modo escuro, hot corners
+desligado, botões da janela à direita, teclado `br`, dash-to-dock embaixo com 90% de altura,
+blur-my-shell configurado (hoje desativado), Nautilus em ícones.
+
+**Atalhos:** `Ctrl+Alt+T` terminal · `Print` Flameshot · `Super+D` mostrar área de trabalho.
+
+**Extensões** (lista em `gnome/shell-extensions.txt`) não dá pra instalar por script de forma
+confiável — instale pelo extensions.gnome.org ou pelo Extension Manager. A configuração delas
+já vem restaurada, então nascem do jeito certo.
+
+## O que NÃO está no repo (de propósito)
+
+Chaves SSH/GPG (`~/.ssh`, `~/.gnupg`), tokens (`gh`, `~/.npmrc`), históricos de shell,
+bancos de dados locais, caches e o tema WhiteSur em si (22 MB — é clonado na instalação).

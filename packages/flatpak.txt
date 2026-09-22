@@ -1,0 +1,5 @@
+com.discordapp.Discord
+com.google.AndroidStudio
+com.jetbrains.IntelliJ-IDEA-Community
+com.mattjakeman.ExtensionManager
+io.dbeaver.DBeaverCommunity

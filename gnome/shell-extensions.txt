@@ -1,5 +1,6 @@
-upower-battery@codilia.com
+Bluetooth-Battery-Meter@maniacx.github.com
 blur-my-shell@aunetx
 dash-to-dock@micxgx.gmail.com
 quick-settings-tweaks@qwreey
+upower-battery@codilia.com
 user-theme@gnome-shell-extensions.gcampax.github.com

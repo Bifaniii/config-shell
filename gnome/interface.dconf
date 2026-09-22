@@ -1,4 +1,6 @@
 [/]
 color-scheme='prefer-dark'
+enable-hot-corners=false
 gtk-theme='WhiteSur-Dark'
 icon-theme='WhiteSur-dark'
+show-battery-percentage=true
