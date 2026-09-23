@@ -66,6 +66,14 @@ git add -A && git commit -m "update" && git push
 
 `packages/apt.txt` é curado à mão — instalou algo novo com `apt`? Adicione lá.
 
+### Se um repositório falhar
+
+Chaves GPG de terceiros rotacionam e expiram. Quando isso acontece, `apt-repos.sh` avisa
+quais repositórios falharam e segue com os demais; depois o `install-apps.sh` tenta os
+pacotes um a um, então só o que depende do repositório quebrado fica de fora. Pra consertar,
+atualize a URL da chave dentro de `packages/apt-repos.sh` e apague o keyring velho
+(`/usr/share/keyrings/<nome>.gpg` ou `/etc/apt/keyrings/<nome>`) antes de rodar de novo.
+
 ## Programas instalados
 
 **Dev:** git, build-essential, openjdk-21 + Maven (via SDKMAN: Java 21.0.5-tem, Maven 3.9.16),
