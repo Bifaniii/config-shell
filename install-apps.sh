@@ -14,7 +14,18 @@ missing=()
 for p in "${PKGS[@]}"; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
 if (( ${#missing[@]} )); then
     info "Instalando ${#missing[@]} pacotes: ${missing[*]}"
-    sudo apt-get install -y "${missing[@]}"
+    # se algum pacote não existir/estiver indisponível, instala os outros mesmo assim
+    if ! sudo apt-get install -y "${missing[@]}"; then
+        warn "A instalação em lote falhou; tentando um a um"
+        failed=()
+        for p in "${missing[@]}"; do
+            sudo apt-get install -y -qq "$p" >/dev/null 2>&1 || failed+=("$p")
+        done
+        if (( ${#failed[@]} )); then
+            warn "Não instalados: ${failed[*]}"
+            warn "Instale manualmente ou remova de packages/apt.txt"
+        fi
+    fi
 else
     info "Todos os ${#PKGS[@]} pacotes já instalados"
 fi

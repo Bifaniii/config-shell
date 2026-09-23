@@ -10,15 +10,27 @@ SOURCES=/etc/apt/sources.list.d
 sudo install -d -m 0755 "$KEYRINGS"
 ARCH="$(dpkg --print-architecture)"
 
-# key_from <url> <arquivo-destino>  — baixa e desarmoura se preciso
+# key_from <url> <arquivo-destino>
+# Chaves .asc vão como vieram. Para .gpg, importamos num keyring temporário e
+# reexportamos: alguns fornecedores publicam a mesma chave duas vezes (uma versão
+# antiga já expirada e a renovada), e o `sqv` do apt valida pela primeira que
+# encontra. A importação mescla as duas e mantém a validade estendida.
 key_from() {
     [[ -f "$2" ]] && return 0
+    local tmp; tmp="$(mktemp -d)"
+    if ! curl -fsSL "$1" -o "$tmp/key"; then
+        warn "Falhou ao baixar a chave: $1"
+        rm -rf "$tmp"; return 1
+    fi
     if [[ "$2" == *.asc ]]; then
-        curl -fsSL "$1" | sudo tee "$2" >/dev/null
+        sudo cp "$tmp/key" "$2"
     else
-        curl -fsSL "$1" | sudo gpg --dearmor -o "$2"
+        gpg --quiet --no-default-keyring --keyring "$tmp/ring.gpg" --import "$tmp/key" 2>/dev/null
+        gpg --quiet --no-default-keyring --keyring "$tmp/ring.gpg" --export > "$tmp/out.gpg"
+        sudo cp "$tmp/out.gpg" "$2"
     fi
     sudo chmod a+r "$2"
+    rm -rf "$tmp"
 }
 
 # Docker
@@ -75,7 +87,7 @@ fi
 # Spotify
 if [[ ! -f $SOURCES/spotify.list ]]; then
     info "Repositório: Spotify"
-    key_from https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg /usr/share/keyrings/spotify.gpg
+    key_from https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.gpg /usr/share/keyrings/spotify.gpg
     echo "deb [signed-by=/usr/share/keyrings/spotify.gpg] https://repository.spotify.com stable non-free" \
         | sudo tee $SOURCES/spotify.list >/dev/null
 fi
@@ -129,5 +141,15 @@ else
     fi
 fi
 
+# Um repositório de terceiros fora do ar (ou com chave rotacionada) não pode
+# impedir a instalação: avisa quais falharam e segue com os que funcionam.
 info "Atualizando índices do apt"
-sudo apt-get update -qq
+if ! sudo apt-get update 2>&1 | tee /tmp/apt-update.$$ | grep -qE '^E:'; then
+    rm -f /tmp/apt-update.$$
+else
+    echo
+    warn "Alguns repositórios falharam (os demais seguem funcionando):"
+    grep -E '^(E|W):' /tmp/apt-update.$$ | sed 's/^/     /' | head -10
+    rm -f /tmp/apt-update.$$
+    warn "Pacotes desses repositórios podem não instalar. Verifique a chave GPG deles."
+fi
