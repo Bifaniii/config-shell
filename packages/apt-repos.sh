@@ -5,10 +5,30 @@ set -euo pipefail
 
 info() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 
+# gpg e curl são usados abaixo; numa instalação mínima podem não existir
+for dep in gpg curl; do
+    if ! command -v "$dep" >/dev/null 2>&1; then
+        info "Instalando dependência: $dep"
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq "$([[ $dep == gpg ]] && echo gnupg || echo curl)"
+    fi
+done
+
+REPO_KEYS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/keys"
 KEYRINGS=/etc/apt/keyrings
 SOURCES=/etc/apt/sources.list.d
 sudo install -d -m 0755 "$KEYRINGS"
 ARCH="$(dpkg --print-architecture)"
+
+# Algumas chaves publicadas pelos fornecedores não passam no validador do apt do
+# Debian 13 (sqv). Quando temos uma cópia boa em packages/keys/, ela tem prioridade.
+# key_local <nome-em-packages/keys> <arquivo-destino>
+key_local() {
+    [[ -f "$2" ]] && return 0
+    [[ -f "$REPO_KEYS/$1" ]] || return 1
+    sudo cp "$REPO_KEYS/$1" "$2"
+    sudo chmod a+r "$2"
+}
 
 # key_from <url> <arquivo-destino>
 # Chaves .asc vão como vieram. Para .gpg, importamos num keyring temporário e
@@ -111,7 +131,10 @@ fi
 # MySQL 8.4 LTS
 if [[ ! -f $SOURCES/mysql.list ]]; then
     info "Repositório: MySQL 8.4 LTS"
-    key_from https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 /usr/share/keyrings/mysql-apt-config.gpg
+    # a chave publicada pela Oracle é rejeitada pelo sqv (primária marcada como
+    # expirada em 2025-10-22); usamos a cópia válida do repo quando existir
+    key_local mysql.gpg /usr/share/keyrings/mysql-apt-config.gpg \
+        || key_from https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 /usr/share/keyrings/mysql-apt-config.gpg
     sudo tee $SOURCES/mysql.list >/dev/null <<EOF
 deb [signed-by=/usr/share/keyrings/mysql-apt-config.gpg] http://repo.mysql.com/apt/debian/ bookworm mysql-apt-config
 deb [signed-by=/usr/share/keyrings/mysql-apt-config.gpg] http://repo.mysql.com/apt/debian/ bookworm mysql-8.4-lts

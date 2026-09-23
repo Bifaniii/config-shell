@@ -34,6 +34,7 @@ sqlite3
 sqlitebrowser
 
 # --- bancos de dados ---
+mysql-apt-config
 mysql-server
 mysql-client
 postgresql
