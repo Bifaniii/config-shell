@@ -464,6 +464,15 @@ do
   }
   vim.cmd.colorscheme 'dracula'
 
+  -- Tokyo Night fica instalado para trocar quando quiser: :colorscheme tokyonight-night
+  vim.pack.add { gh 'folke/tokyonight.nvim' }
+  ---@diagnostic disable-next-line: missing-fields
+  require('tokyonight').setup {
+    styles = {
+      comments = { italic = false }, -- Disable italics in comments
+    },
+  }
+
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
