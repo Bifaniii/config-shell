@@ -161,8 +161,8 @@ do
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
 
-  -- Show which line your cursor is on
-  vim.o.cursorline = true
+  -- Não destacar a linha do cursor
+  vim.o.cursorline = false
 
   -- Minimal number of screen lines to keep above and below the cursor.
   vim.o.scrolloff = 10
@@ -456,18 +456,13 @@ do
   -- change the command under that to load whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add { gh 'folke/tokyonight.nvim' }
-  ---@diagnostic disable-next-line: missing-fields
-  require('tokyonight').setup {
-    styles = {
-      comments = { italic = false }, -- Disable italics in comments
-    },
+  -- Dracula (mesmas cores do Dracula do VS Code), com o fundo da paleta do terminal
+  vim.pack.add { gh 'Mofiqul/dracula.nvim' }
+  require('dracula').setup {
+    colors = { bg = '#01020B' },
+    italic_comment = false, -- Disable italics in comments
   }
-
-  -- Load the colorscheme here.
-  -- Like many other themes, this one has different styles, and you could load
-  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  vim.cmd.colorscheme 'dracula'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -929,7 +924,7 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'enter', -- Enter aceita a sugestão (e faz o import automático no Java)
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

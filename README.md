@@ -108,8 +108,8 @@ O `.zshrc` tem o alias `springnew`, que roda `spring init` já com Maven e Java 
 A config em `nvim/` é baseada no [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim),
 que instala os plugins pelo `vim.pack`, embutido no Neovim 0.12. O neovim do apt é velho demais
 pra ela, então o `install-neovim.sh` põe o binário oficial em `~/.local/opt/nvim`, com link em
-`~/.local/bin`. Vem com tema Tokyo Night, telescope, LSP via Mason, autocomplete (blink.cmp),
-treesitter e neo-tree. Os ícones usam texto e Unicode que a JetBrains Mono já tem, sem Nerd Font.
+`~/.local/bin`. Vem com tema Dracula (fundo `#01020B`, igual ao do terminal), telescope,
+LSP via Mason, autocomplete (blink.cmp), treesitter e neo-tree. Os ícones usam texto e Unicode que a JetBrains Mono já tem, sem Nerd Font.
 `vim` é alias de `nvim`; o vim clássico continua acessível como `\vim`.
 
 Pra Java, o `nvim/ftplugin/java.lua` sobe o jdtls (instalado pelo Mason) com Lombok, usando o JDK
@@ -121,7 +121,7 @@ por padrão.
 | `Space sf` / `Space sg` | buscar arquivo / buscar texto no projeto |
 | `Space sn` | buscar nos arquivos de config do neovim |
 | `Space e` / `\` | árvore de arquivos / árvore no arquivo atual |
-| `Ctrl y` | aceitar sugestão do autocomplete |
+| `Enter` | aceitar sugestão do autocomplete (no Java, já faz o import) |
 | `grd` / `grr` / `grn` / `gra` | definição / referências / renomear / code actions |
 | `K` | documentação |
 | `Space jo` | organizar imports (Java) |
