@@ -51,3 +51,6 @@ command -v ng >/dev/null 2>&1 && source <(ng completion script)
 
 # vim abre o neovim (config em ~/.config/nvim -> ~/config-shell/nvim)
 command -v nvim >/dev/null 2>&1 && alias vim=nvim
+
+# Spring Boot: novo projeto Maven com Java 17
+alias springnew='spring init --build=maven --java-version=17'

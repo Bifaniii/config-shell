@@ -1,3 +1,4 @@
 # candidato versão
 java 21.0.5-tem
 maven 3.9.16
+springboot 4.1.0
