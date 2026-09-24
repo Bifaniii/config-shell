@@ -73,6 +73,12 @@ link zsh/.zshrc                 "$HOME/.zshrc"
 link vim/.vimrc                 "$HOME/.vimrc"
 link vim/colors/pastelterm.vim  "$HOME/.vim/colors/pastelterm.vim"
 link git/.gitconfig             "$HOME/.gitconfig"
+# nome/e-mail do git não ficam no repo (o ~/.gitconfig acima inclui este arquivo)
+if [[ ! -f "$HOME/.gitconfig.local" ]]; then
+    warn "Configure sua identidade do git (fica fora do repo, em ~/.gitconfig.local):"
+    warn "  git config --file ~/.gitconfig.local user.name  \"Seu Nome\""
+    warn "  git config --file ~/.gitconfig.local user.email \"voce@exemplo.com\""
+fi
 
 # ---------- 5. ambiente GNOME ----------
 if (( DO_DESKTOP )); then

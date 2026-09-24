@@ -52,11 +52,15 @@ if [[ ! -d "$HOME/.sdkman" ]]; then
     curl -s "https://get.sdkman.io?rcupdate=false" | bash
 fi
 set +u; source "$HOME/.sdkman/bin/sdkman-init.sh"; set -u
-while read -r cand ver; do
+defaults=()
+while read -r cand ver flag; do
     [[ -z "${cand:-}" || "$cand" == \#* ]] && continue
+    [[ "${flag:-}" == default ]] && defaults+=("$cand $ver")
     if [[ -d "$HOME/.sdkman/candidates/$cand/$ver" ]]; then info "SDKMAN: $cand $ver já instalado"
     else info "SDKMAN: instalando $cand $ver"; sdk install "$cand" "$ver" </dev/null || warn "Falhou: $cand $ver"; fi
 done < "$REPO/packages/sdkman.txt"
+# sdk install pode trocar a versão padrão; volta para a marcada como default
+for d in "${defaults[@]}"; do sdk default $d >/dev/null || warn "Falhou: sdk default $d"; done
 
 step "Pacotes npm globais"
 if command -v npm >/dev/null 2>&1; then

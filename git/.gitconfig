@@ -1,3 +1,8 @@
+# Nome e e-mail ficam fora do repo, em ~/.gitconfig.local:
+#   git config --file ~/.gitconfig.local user.name  "Seu Nome"
+#   git config --file ~/.gitconfig.local user.email "voce@exemplo.com"
+[include]
+	path = ~/.gitconfig.local
 [credential "https://github.com"]
 	helper = 
 	helper = !gh auth git-credential

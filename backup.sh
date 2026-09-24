@@ -20,8 +20,9 @@ if has_gui; then
     dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$REPO/gnome/keybindings-media.dconf"
     dconf dump /org/gnome/desktop/wm/keybindings/             > "$REPO/gnome/keybindings-wm.dconf"
     dconf dump /org/gnome/nautilus/                           > "$REPO/gnome/nautilus.dconf"
+    # device-list (MAC dos fones Bluetooth) e locations (clima/relógios) são pessoais: ficam de fora
     dconf dump /org/gnome/shell/ \
-        | grep -vE '^(app-picker-layout|welcome-dialog|command-history|had-bluetooth|looking-glass)' \
+        | grep -vE '^(app-picker-layout|welcome-dialog|command-history|had-bluetooth|looking-glass|device-list|locations)=' \
         > "$REPO/gnome/shell.dconf"
     {
         for sec in wm/preferences peripherals input-sources screensaver background; do
@@ -60,11 +61,15 @@ if command -v code >/dev/null 2>&1; then
 fi
 if [[ -d "$HOME/.sdkman/candidates" ]]; then
     {
-        echo "# candidato versão"
+        echo "# candidato versão [default]  (todas as versões instaladas; 'default' marca a current)"
         for c in "$HOME"/.sdkman/candidates/*/; do
             n="$(basename "$c")"
-            v="$(readlink "$c/current" 2>/dev/null | xargs -r basename)"
-            [[ -n "$v" ]] && echo "$n $v"
+            cur="$(readlink "$c/current" 2>/dev/null | xargs -r basename)"
+            for v in "$c"*/; do
+                v="$(basename "$v")"
+                [[ "$v" == current ]] && continue
+                if [[ "$v" == "$cur" ]]; then echo "$n $v default"; else echo "$n $v"; fi
+            done
         done
     } > "$REPO/packages/sdkman.txt"
     info "sdkman.txt"

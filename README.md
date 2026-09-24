@@ -1,7 +1,7 @@
 # config-shell
 
 Minha máquina inteira num repositório: programas, dotfiles, ambiente GNOME e temas.
-Numa máquina nova (Debian 13 / GNOME), um `git clone` + `./install.sh` reconstrói tudo.
+Numa máquina nova (Debian 13 com GNOME), um `git clone` seguido de `./install.sh` reconstrói tudo.
 
 ```bash
 git clone https://github.com/Bifaniii/config-shell.git ~/config-shell
@@ -18,7 +18,7 @@ cd ~/config-shell
 |---|---|
 | `--no-apps` | pula a instalação de programas; instala só o mínimo e restaura as configs |
 | `--no-desktop` | pula o ambiente GNOME (tema, wallpaper, atalhos, extensões) |
-| `--pastelterm` | usa a paleta **pastelterm** no terminal em vez da **Dracula** |
+| `--pastelterm` | usa a paleta pastelterm no terminal em vez da Dracula |
 
 ## Scripts
 
@@ -53,8 +53,18 @@ lib/          common.sh (funções compartilhadas pelos scripts)
 ### Dotfiles são symlinks
 
 `~/.zshrc`, `~/.vimrc`, `~/.vim/colors/pastelterm.vim`, `~/.gitconfig` e `~/.config/nvim`
-apontam pra dentro deste repo. Editou? O repo já reflete — só `git commit`.
+apontam pra dentro deste repo. Se editar um deles, a mudança já está no repo e só falta o `git commit`.
 Arquivos que existiam antes viram `*.bak-<data>`.
+
+Nome e e-mail do git ficam fora do repo, em `~/.gitconfig.local`, que o `.gitconfig` inclui.
+Numa máquina nova, crie esse arquivo antes do primeiro commit:
+
+```bash
+git config --file ~/.gitconfig.local user.name  "Seu Nome"
+git config --file ~/.gitconfig.local user.email "voce@exemplo.com"
+```
+
+Não use `git config --global` pra isso: ele grava no `~/.gitconfig`, que é o arquivo do repo.
 
 ### O resto vai pelo backup.sh
 
@@ -65,7 +75,9 @@ dconf, listas de pacotes e configs de apps não dão pra symlinkar. Depois de me
 git add -A && git commit -m "update" && git push
 ```
 
-`packages/apt.txt` é curado à mão — instalou algo novo com `apt`? Adicione lá.
+O `packages/apt.txt` é curado à mão. Se instalar algo novo com `apt`, adicione lá.
+O `sdkman.txt` lista todas as versões instaladas de cada candidato e marca com `default`
+a que fica como padrão.
 
 ### Se um repositório falhar
 
@@ -77,25 +89,32 @@ atualize a URL da chave dentro de `packages/apt-repos.sh` e apague o keyring vel
 
 ## Programas instalados
 
-**Dev:** git, build-essential, openjdk-21 + Maven (via SDKMAN: Java 21.0.5-tem, Maven 3.9.16),
-Node 24 (NodeSource) + Angular CLI, lua/luarocks, sassc, Docker CE + compose, VS Code, IntelliJ IDEA
-e Android Studio (flatpak).
-**Bancos:** MySQL 8.4 LTS, PostgreSQL, pgAdmin 4, DBeaver (flatpak), sqlitebrowser.
-**Apps:** Chrome, Spotify, Discord (flatpak), AnyDesk, Steam, Wine, Flameshot, Extension Manager.
-**Terminal:** zsh + oh-my-zsh (robbyrussell, autosuggestions, syntax-highlighting), vim, neovim,
+Dev: git, build-essential, openjdk-21, SDKMAN (Java 17.0.20-tem como padrão e 21.0.5-tem,
+Maven 3.9.16, Spring Boot CLI 4.1.0), Node 24 (NodeSource) + Angular CLI, lua/luarocks, sassc,
+Docker CE + compose, VS Code, IntelliJ IDEA e Android Studio (flatpak).
+
+Bancos: MySQL 8.4 LTS, PostgreSQL, pgAdmin 4, DBeaver (flatpak), sqlitebrowser.
+
+Apps: Chrome, Spotify, Discord (flatpak), AnyDesk, Steam, Wine, Flameshot, Extension Manager.
+
+Terminal: zsh + oh-my-zsh (robbyrussell, autosuggestions, syntax-highlighting), vim, neovim,
 bat, ripgrep, fastfetch, xclip/wl-clipboard.
+
+O `.zshrc` tem o alias `springnew`, que roda `spring init` já com Maven e Java 17:
+`springnew -g=com.exemplo -a=minha-api -d=web,lombok minha-api`.
 
 ## Neovim
 
-Config em `nvim/`, baseada no [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-(plugins pelo `vim.pack`, embutido no Neovim 0.12). O neovim do apt é velho demais para ela,
-então o `install-neovim.sh` põe o binário oficial em `~/.local/opt/nvim` (link em `~/.local/bin`).
-Tema Tokyo Night, telescope, LSP via Mason, autocomplete (blink.cmp), treesitter e neo-tree.
-Sem Nerd Font: os ícones foram trocados por texto/Unicode que a JetBrains Mono tem.
+A config em `nvim/` é baseada no [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim),
+que instala os plugins pelo `vim.pack`, embutido no Neovim 0.12. O neovim do apt é velho demais
+pra ela, então o `install-neovim.sh` põe o binário oficial em `~/.local/opt/nvim`, com link em
+`~/.local/bin`. Vem com tema Tokyo Night, telescope, LSP via Mason, autocomplete (blink.cmp),
+treesitter e neo-tree. Os ícones usam texto e Unicode que a JetBrains Mono já tem, sem Nerd Font.
 `vim` é alias de `nvim`; o vim clássico continua acessível como `\vim`.
 
-**Java:** `nvim/ftplugin/java.lua` sobe o jdtls (instalado pelo Mason) com o JDK mais novo do
-SDKMAN (precisa de 21+) e Lombok; os projetos compilam com o Java 17 por padrão.
+Pra Java, o `nvim/ftplugin/java.lua` sobe o jdtls (instalado pelo Mason) com Lombok, usando o JDK
+mais novo do SDKMAN, porque o jdtls precisa de Java 21 ou mais. Os projetos compilam com o Java 17
+por padrão.
 
 | tecla | ação |
 |---|---|
@@ -112,7 +131,7 @@ Na árvore: `a` cria, `d` apaga, `r` renomeia, `?` lista tudo.
 
 ## Paletas do terminal
 
-### Dracula (ativa) — `gnome/terminal-dracula.dconf`
+### Dracula (ativa), em `gnome/terminal-dracula.dconf`
 
 | | normal | bright |
 |---|---|---|
@@ -129,25 +148,27 @@ Na árvore: `a` cria, `d` apaga, `r` renomeia, `?` lista tudo.
 Paleta oficial do [dracula/gnome-terminal](https://github.com/dracula/gnome-terminal), com o fundo
 escurecido à mão (`#01020b`) e `bold-color-same-as-fg`. Seleção `#44475a`, cursor `#f8f8f2`.
 
-### pastelterm — `gnome/terminal-pastelterm.dconf` + `vim/colors/pastelterm.vim`
+### pastelterm, em `gnome/terminal-pastelterm.dconf` + `vim/colors/pastelterm.vim`
 
-Paleta feita à mão, fundo `#12161a`, texto `#acff9d`. Trocar: `./install-dracula.sh --pastelterm`.
+Paleta feita à mão, fundo `#12161a`, texto `#acff9d`. Pra trocar: `./install-dracula.sh --pastelterm`.
 
-Ambas: JetBrains Mono 12, `bold-is-bright`.
+As duas usam JetBrains Mono 12 e `bold-is-bright`.
 
 ## Ambiente GNOME
 
-Tema **WhiteSur-Dark** (GTK + ícones, clonado do GitHub na instalação), modo escuro, hot corners
+Tema WhiteSur-Dark (GTK + ícones, clonado do GitHub na instalação), modo escuro, hot corners
 desligado, botões da janela à direita, teclado `br`, dash-to-dock embaixo com 90% de altura,
 blur-my-shell configurado (hoje desativado), Nautilus em ícones.
 
-**Atalhos:** `Ctrl+Alt+T` terminal · `Print` Flameshot · `Super+D` mostrar área de trabalho.
+Atalhos: `Ctrl+Alt+T` abre o terminal, `Print` abre o Flameshot e `Super+D` mostra a área de trabalho.
 
-**Extensões** (lista em `gnome/shell-extensions.txt`) não dá pra instalar por script de forma
-confiável — instale pelo extensions.gnome.org ou pelo Extension Manager. A configuração delas
-já vem restaurada, então nascem do jeito certo.
+As extensões (lista em `gnome/shell-extensions.txt`) não dá pra instalar por script de forma
+confiável. Instale pelo extensions.gnome.org ou pelo Extension Manager; a configuração delas
+já vem restaurada, então elas nascem do jeito certo.
 
-## O que NÃO está no repo (de propósito)
+## O que fica fora do repo (de propósito)
 
-Chaves SSH/GPG (`~/.ssh`, `~/.gnupg`), tokens (`gh`, `~/.npmrc`), históricos de shell,
-bancos de dados locais, caches e o tema WhiteSur em si (22 MB — é clonado na instalação).
+Chaves SSH/GPG (`~/.ssh`, `~/.gnupg`), tokens (`gh`, `~/.npmrc`), nome e e-mail do git
+(`~/.gitconfig.local`), históricos de shell, bancos de dados locais, caches e o tema WhiteSur
+em si (22 MB, clonado na instalação). O `backup.sh` também deixa de fora os dispositivos
+Bluetooth e as localizações do clima e do relógio mundial que o GNOME guarda.
