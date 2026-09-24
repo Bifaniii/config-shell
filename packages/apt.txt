@@ -68,7 +68,6 @@ traceroute
 nftables
 lsof
 usbutils
-adb
 dosfstools
 f3
 alsa-utils
