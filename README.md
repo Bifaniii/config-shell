@@ -9,7 +9,7 @@ cd ~/config-shell
 ./install.sh
 ```
 
-> Demora bastante e baixa vários GB (Chrome, VS Code, Docker, MySQL, Android Studio, Steam...).
+> Demora bastante e baixa vários GB (Chrome, VS Code, Docker, MySQL, Steam...).
 > Pra só restaurar as configurações, sem instalar programas: `./install.sh --no-apps`.
 
 ## Flags do install.sh
@@ -91,7 +91,7 @@ atualize a URL da chave dentro de `packages/apt-repos.sh` e apague o keyring vel
 
 Dev: git, build-essential, openjdk-21, SDKMAN (Java 17.0.20-tem como padrão e 21.0.5-tem,
 Maven 3.9.16, Spring Boot CLI 4.1.0), Node 24 (NodeSource) + Angular CLI, lua/luarocks, sassc,
-Docker CE + compose, VS Code, IntelliJ IDEA e Android Studio (flatpak).
+Docker CE + compose, VS Code e IntelliJ IDEA (flatpak).
 
 Bancos: MySQL 8.4 LTS, PostgreSQL, pgAdmin 4, DBeaver (flatpak), sqlitebrowser.
 
