@@ -7,7 +7,8 @@
 # Etapas (cada uma também roda sozinha):
 #   ./install-apps.sh      programas: apt, flatpak, SDKMAN, npm, extensões do VS Code
 #   ./install-desktop.sh   GNOME: tema WhiteSur, wallpaper, atalhos, dash-to-dock, blur
-#   ./install-dracula.sh   neovim + tema Dracula + paleta do terminal
+#   ./install-neovim.sh    neovim 0.12 + kickstart.nvim + LSP de Java
+#   ./install-dracula.sh   paleta Dracula do terminal
 #
 # Flags:
 #   --no-apps       pula a instalação de programas (só configs)
@@ -79,6 +80,9 @@ if (( DO_DESKTOP )); then
 fi
 
 # ---------- 6. neovim + paleta do terminal ----------
+step "Neovim"
+"$REPO/install-neovim.sh"
+
 if [[ "$PALETTE" == "dracula" ]]; then
     "$REPO/install-dracula.sh"
 else

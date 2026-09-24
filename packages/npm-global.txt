@@ -1,1 +1,2 @@
 @angular/cli
+tree-sitter-cli

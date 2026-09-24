@@ -26,10 +26,11 @@ Cada etapa também roda sozinha:
 
 | script | o que faz |
 |---|---|
-| `install.sh` | orquestra tudo (chama os três abaixo) |
+| `install.sh` | orquestra tudo (chama os quatro abaixo) |
 | `install-apps.sh` | apt + repos de terceiros, flatpak, SDKMAN, npm global, extensões do VS Code |
 | `install-desktop.sh` | tema WhiteSur, wallpapers, atalhos, dash-to-dock, blur, nautilus, GTK |
-| `install-dracula.sh` | neovim + tema Dracula + paleta do terminal (`--pastelterm` volta as cores) |
+| `install-neovim.sh` | Neovim 0.12 (binário oficial em `~/.local`) + kickstart.nvim + jdtls |
+| `install-dracula.sh` | paleta Dracula do terminal (`--pastelterm` volta as cores) |
 | `backup.sh` | re-exporta pro repo tudo que não é symlink (dconf, listas de pacotes, configs de apps) |
 
 ## O que está versionado
@@ -41,7 +42,7 @@ gnome/        terminal-dracula.dconf, terminal-pastelterm.dconf, interface, desk
               shell, nautilus, gtk, keybindings-*, shell-extensions.txt
 zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvim)
 vim/          .vimrc + colors/pastelterm.vim
-nvim/         init.lua + lua/plugins/ (lazy.nvim, dracula, treesitter, nvim-tree, telescope)
+nvim/         kickstart.nvim (init.lua) + ftplugin/java.lua (jdtls) + neo-tree
 git/          .gitconfig
 vscode/       settings.json
 flameshot/    flameshot.ini
@@ -86,22 +87,28 @@ bat, ripgrep, fastfetch, xclip/wl-clipboard.
 
 ## Neovim
 
-Config em `nvim/`, gerenciada pelo lazy.nvim. Tema **Dracula**, realce via treesitter,
-árvore de arquivos (nvim-tree) e busca fuzzy (telescope). `vim` é alias de `nvim`;
-o vim clássico continua acessível como `\vim`.
+Config em `nvim/`, baseada no [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
+(plugins pelo `vim.pack`, embutido no Neovim 0.12). O neovim do apt é velho demais para ela,
+então o `install-neovim.sh` põe o binário oficial em `~/.local/opt/nvim` (link em `~/.local/bin`).
+Tema Tokyo Night, telescope, LSP via Mason, autocomplete (blink.cmp), treesitter e neo-tree.
+Sem Nerd Font: os ícones foram trocados por texto/Unicode que a JetBrains Mono tem.
+`vim` é alias de `nvim`; o vim clássico continua acessível como `\vim`.
+
+**Java:** `nvim/ftplugin/java.lua` sobe o jdtls (instalado pelo Mason) com o JDK mais novo do
+SDKMAN (precisa de 21+) e Lombok; os projetos compilam com o Java 17 por padrão.
 
 | tecla | ação |
 |---|---|
-| `nvim .` | abre o projeto na pasta atual |
-| `Space e` / `Space E` | árvore de arquivos / árvore no arquivo atual |
-| `Space ff` | buscar arquivo por nome |
-| `Space fg` | buscar texto no projeto (ripgrep) |
-| `Space fb` / `Space fr` | buffers abertos / arquivos recentes |
-| `Space w` / `Space q` | salvar / fechar |
-| `Ctrl h/j/k/l` | pular entre janelas |
-| `Esc` | limpa o destaque da busca |
+| `Space sf` / `Space sg` | buscar arquivo / buscar texto no projeto |
+| `Space sn` | buscar nos arquivos de config do neovim |
+| `Space e` / `\` | árvore de arquivos / árvore no arquivo atual |
+| `Ctrl y` | aceitar sugestão do autocomplete |
+| `grd` / `grr` / `grn` / `gra` | definição / referências / renomear / code actions |
+| `K` | documentação |
+| `Space jo` | organizar imports (Java) |
+| `Space jv` / `Space jc` / `Space jm` | extrair variável / constante / método (Java) |
 
-Na árvore: `Enter` abre, `a` cria, `d` apaga, `r` renomeia, `H` mostra ocultos, `g?` lista tudo.
+Na árvore: `a` cria, `d` apaga, `r` renomeia, `?` lista tudo.
 
 ## Paletas do terminal
 
