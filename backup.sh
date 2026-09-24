@@ -22,7 +22,7 @@ if has_gui; then
     dconf dump /org/gnome/nautilus/                           > "$REPO/gnome/nautilus.dconf"
     # device-list (MAC dos fones Bluetooth) e locations (clima/relógios) são pessoais: ficam de fora
     dconf dump /org/gnome/shell/ \
-        | grep -vE '^(app-picker-layout|welcome-dialog|command-history|had-bluetooth|looking-glass|device-list|locations)=' \
+        | grep -vE '^(app-picker-layout|welcome-dialog|command-history|had-bluetooth|looking-glass|device-list|locations)' \
         > "$REPO/gnome/shell.dconf"
     {
         for sec in wm/preferences peripherals input-sources screensaver background; do
