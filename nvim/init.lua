@@ -158,6 +158,13 @@ do
   vim.o.list = true
   vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+  -- Indentação igual à do IntelliJ: 4 espaços, e TAB de arquivos existentes aparece com 4 colunas
+  -- (o guess-indent mantém TAB nos arquivos que já usam TAB, como os gerados pelo Spring Initializr)
+  vim.o.tabstop = 4
+  vim.o.shiftwidth = 4
+  vim.o.softtabstop = 4
+  vim.o.expandtab = true
+
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
 

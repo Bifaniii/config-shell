@@ -1,6 +1,31 @@
 -- LSP do Java (jdtls) via nvim-jdtls. Carregado automaticamente ao abrir um arquivo .java.
 vim.pack.add { 'https://github.com/mfussenegger/nvim-jdtls' }
 
+-- Arquivo .java novo (vazio): já preenche com o package e a classe, como o IntelliJ faz.
+-- O package vem do caminho depois de src/main/java/ ou src/test/java/.
+local function fill_new_file()
+  local buf = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  if #lines > 1 or lines[1] ~= '' then return end
+
+  local path = vim.api.nvim_buf_get_name(buf)
+  local class = vim.fn.fnamemodify(path, ':t:r')
+  if not class:match '^[%a_$][%w_$]*$' then return end
+
+  local dir = vim.fn.fnamemodify(path, ':h') .. '/'
+  local pkg = dir:match '/src/main/java/(.*)/$' or dir:match '/src/test/java/(.*)/$'
+
+  local template = {}
+  if pkg and pkg ~= '' then vim.list_extend(template, { 'package ' .. pkg:gsub('/', '.') .. ';', '' }) end
+  local indent = vim.bo[buf].expandtab and string.rep(' ', vim.fn.shiftwidth()) or '\t'
+  vim.list_extend(template, { 'public class ' .. class .. ' {', indent, '}' })
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, template)
+  vim.api.nvim_win_set_cursor(0, { #template - 1, #indent })
+  vim.cmd 'startinsert!' -- já começa digitando dentro da classe
+end
+fill_new_file()
+
 local jdtls = require 'jdtls'
 
 local home = vim.env.HOME
