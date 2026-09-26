@@ -29,7 +29,7 @@ Cada etapa também roda sozinha:
 | `install.sh` | orquestra tudo (chama os quatro abaixo) |
 | `install-apps.sh` | apt + repos de terceiros, flatpak, SDKMAN, npm global, extensões do VS Code |
 | `install-desktop.sh` | tema WhiteSur, wallpapers, atalhos, dash-to-dock, blur, nautilus, GTK |
-| `install-neovim.sh` | Neovim 0.12 (binário oficial em `~/.local`) + kickstart.nvim + jdtls |
+| `install-neovim.sh` | Neovim 0.12 (binário oficial em `~/.local`) + kickstart.nvim + LSPs de Java e web |
 | `install-dracula.sh` | paleta Dracula do terminal (`--pastelterm` volta as cores) |
 | `backup.sh` | re-exporta pro repo tudo que não é symlink (dconf, listas de pacotes, configs de apps) |
 
@@ -115,6 +115,13 @@ LSP via Mason, autocomplete (blink.cmp), treesitter e neo-tree. Os ícones usam 
 Pra Java, o `nvim/ftplugin/java.lua` sobe o jdtls (instalado pelo Mason) com Lombok, usando o JDK
 mais novo do SDKMAN, porque o jdtls precisa de Java 21 ou mais. Os projetos compilam com o Java 17
 por padrão.
+
+Pra web e Angular, o Mason instala os servidores de TypeScript/JavaScript (`ts_ls`), Angular
+(`angularls`), HTML, CSS/SCSS e Emmet. O autocomplete faz o import sozinho ao aceitar a sugestão,
+o Emmet expande abreviações como `div.card>ul>li*3` e o nvim-ts-autotag fecha as tags
+(`<div>` ganha o `</div>`). O `angularls` usa o `@angular/core` do `node_modules` do projeto,
+então rode `npm install` antes de abrir. A indentação segue o `.editorconfig` do projeto
+(2 espaços num projeto Angular).
 
 | tecla | ação |
 |---|---|

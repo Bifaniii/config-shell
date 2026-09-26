@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install-neovim.sh — Neovim 0.12 + config kickstart.nvim (nvim/) com LSP de Java (jdtls).
+# install-neovim.sh — Neovim 0.12 + config kickstart.nvim (nvim/) com LSP de Java (jdtls) e web/Angular.
 # Chamado pelo install.sh; roda sozinho também.
 #
 # O neovim do apt (Debian 13) é velho demais para o kickstart atual (usa vim.pack, 0.12+),
@@ -60,15 +60,17 @@ fi
 # ---------- config (symlink ~/.config/nvim -> repo) ----------
 link nvim "$HOME/.config/nvim"
 
-# ---------- plugins, parsers e jdtls sem abrir a UI ----------
+# ---------- plugins, parsers e servidores de linguagem sem abrir a UI ----------
 # Na primeira abertura o vim.pack baixa os plugins e o nvim-treesitter compila os parsers
-# (assíncrono, por isso o sleep). Depois o Mason instala o jdtls, que o ftplugin/java.lua usa.
+# (assíncrono, por isso o sleep). Depois o Mason instala os servidores de linguagem.
 info "Instalando plugins e parsers do treesitter"
 timeout 600 "$NVIM" --headless "+sleep 90" +qa </dev/null >/dev/null 2>&1 \
     || warn "Instalação de plugins falhou; abra o nvim e confira as mensagens"
 
-info "Instalando o jdtls (LSP de Java) pelo Mason"
-timeout 600 "$NVIM" --headless "+MasonInstall jdtls" +qa </dev/null >/dev/null 2>&1 \
-    || warn "jdtls falhou; abra o nvim e rode :MasonInstall jdtls"
+# Servidores de linguagem: Java (jdtls) e web/Angular (TS, Angular, HTML, CSS, Emmet)
+LSPS="jdtls typescript-language-server angular-language-server html-lsp css-lsp emmet-language-server"
+info "Instalando os servidores de linguagem pelo Mason: $LSPS"
+timeout 900 "$NVIM" --headless "+MasonInstall $LSPS" +qa </dev/null >/dev/null 2>&1 \
+    || warn "Mason falhou; abra o nvim e rode :MasonInstall $LSPS"
 
 info "Pronto. Abra um terminal novo e rode: nvim"

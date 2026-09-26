@@ -788,6 +788,13 @@ do
     -- But for many setups, the LSP (`rust_analyzer`) will work just fine
     -- rust_analyzer = {},
 
+    -- Web / Angular: autocomplete com import automático, tags, CSS e Emmet
+    ts_ls = {}, -- JavaScript e TypeScript
+    angularls = {}, -- templates e componentes Angular (usa o @angular/core do node_modules do projeto)
+    html = { filetypes = { 'html', 'htmlangular' } }, -- htmlangular = templates *.component.html
+    cssls = {}, -- CSS, SCSS e Less
+    emmet_language_server = {}, -- abreviações Emmet: div.card>ul>li*3
+
     stylua = {}, -- Used to format Lua code
 
     -- Special Lua Config, as recommended by neovim help docs
@@ -996,7 +1003,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'java', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'java', 'javascript', 'typescript', 'tsx', 'css', 'scss', 'angular', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
@@ -1046,6 +1053,10 @@ do
       end
     end,
   })
+
+  -- Fecha tags sozinho (<div> ganha o </div>) e renomeia o par junto, inclusive em templates Angular
+  vim.pack.add { gh 'windwp/nvim-ts-autotag' }
+  require('nvim-ts-autotag').setup {}
 end
 
 -- ============================================================
