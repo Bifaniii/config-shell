@@ -32,6 +32,7 @@ Cada etapa também roda sozinha:
 | `install-neovim.sh` | Neovim 0.12 (binário oficial em `~/.local`) + kickstart.nvim + LSPs de Java e web |
 | `install-dracula.sh` | paleta Dracula do terminal (`--pastelterm` volta as cores) |
 | `backup.sh` | re-exporta pro repo tudo que não é symlink (dconf, listas de pacotes, configs de apps) |
+| `install-neovim.ps1` | só o Neovim, no Windows (veja [Neovim no Windows](#neovim-no-windows)) |
 
 ## O que está versionado
 
@@ -135,6 +136,25 @@ então rode `npm install` antes de abrir. A indentação segue o `.editorconfig`
 | `Space jv` / `Space jc` / `Space jm` | extrair variável / constante / método (Java) |
 
 Na árvore: `a` cria, `d` apaga, `r` renomeia, `?` lista tudo.
+
+### Neovim no Windows
+
+A mesma config roda no Windows 10/11. Num PowerShell comum (não precisa de administrador,
+o winget pede permissão quando precisa):
+
+```powershell
+irm https://raw.githubusercontent.com/Bifaniii/config-shell/master/install-neovim.ps1 | iex
+```
+
+O script clona o repo em `~\config-shell` (ou dá `git pull` se já existir) e instala pelo winget
+o que faltar: Git, Neovim 0.12+, ripgrep, Node LTS, JDK 17 e 21 (Temurin) e o Build Tools do
+Visual Studio, que é o compilador C dos parsers do treesitter e o passo mais demorado.
+Depois liga `%LOCALAPPDATA%\nvim` à pasta `nvim\` do repo com uma junction e instala plugins,
+parsers e servidores de linguagem. Pode rodar de novo quando quiser: ele pula o que já existe.
+
+No Windows não tem SDKMAN: o `ftplugin/java.lua` procura os JDKs em
+`C:\Program Files\Eclipse Adoptium` e sobe o jdtls direto pelo launcher do Eclipse, sem Python.
+Pra atualizar a config depois, é só `git -C ~\config-shell pull`.
 
 ## Paletas do terminal
 

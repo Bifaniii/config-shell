@@ -8,7 +8,7 @@ local function fill_new_file()
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   if #lines > 1 or lines[1] ~= '' then return end
 
-  local path = vim.api.nvim_buf_get_name(buf)
+  local path = vim.fs.normalize(vim.api.nvim_buf_get_name(buf)) -- no Windows troca \ por /
   local class = vim.fn.fnamemodify(path, ':t:r')
   if not class:match '^[%a_$][%w_$]*$' then return end
 
@@ -28,11 +28,15 @@ fill_new_file()
 
 local jdtls = require 'jdtls'
 
-local home = vim.env.HOME
+local home = vim.env.HOME or vim.uv.os_homedir()
 local sdkman_java = home .. '/.sdkman/candidates/java'
 local mason_jdtls = vim.fn.stdpath 'data' .. '/mason/packages/jdtls'
+local is_win = vim.fn.has 'win32' == 1
 
-if vim.fn.executable(mason_jdtls .. '/bin/jdtls') == 0 then
+-- No Windows o jdtls sobe direto pelo launcher do Eclipse (o script bin/jdtls precisa de Python)
+local launcher = vim.fn.glob(mason_jdtls .. '/plugins/org.eclipse.equinox.launcher_*.jar', false, true)[1]
+local installed = is_win and launcher ~= nil or vim.fn.executable(mason_jdtls .. '/bin/jdtls') == 1
+if not installed then
   vim.notify('jdtls não instalado: rode :MasonInstall jdtls', vim.log.levels.WARN)
   return
 end
@@ -50,11 +54,18 @@ for _, path in ipairs(vim.fn.glob(sdkman_java .. '/*', false, true)) do
   local major = tonumber(vim.fs.basename(path):match '^(%d+)%.')
   if major and not jdks[major] then jdks[major] = path end
 end
+-- No Windows (sem SDKMAN): JDKs Temurin instalados pelo winget, em "Eclipse Adoptium\jdk-21.0.x-hotspot"
+if is_win then
+  for _, path in ipairs(vim.fn.glob('C:/Program Files/Eclipse Adoptium/jdk-*', false, true)) do
+    local major = tonumber(vim.fs.basename(path):match '^jdk%-(%d+)')
+    if major and not jdks[major] then jdks[major] = path end
+  end
+end
 
 -- O jdtls precisa de Java 21+ para rodar: usa o JDK mais novo disponível
 local newest = math.max(0, unpack(vim.tbl_keys(jdks)))
 if newest < 21 then
-  vim.notify('jdtls precisa de Java 21+ (sdk install java 21-tem)', vim.log.levels.WARN)
+  vim.notify('jdtls precisa de Java 21+ (' .. (is_win and 'winget install EclipseAdoptium.Temurin.21.JDK' or 'sdk install java 21-tem') .. ')', vim.log.levels.WARN)
   return
 end
 
@@ -64,13 +75,31 @@ for major, path in pairs(jdks) do
   table.insert(runtimes, { name = 'JavaSE-' .. major, path = path, default = major == 17 or nil })
 end
 
-jdtls.start_or_attach {
+local cmd = {
+  mason_jdtls .. '/bin/jdtls',
+  '--java-executable', jdks[newest] .. '/bin/java',
+  '--jvm-arg=-javaagent:' .. mason_jdtls .. '/lombok.jar',
+  '-data', workspace_dir,
+}
+if is_win then
   cmd = {
-    mason_jdtls .. '/bin/jdtls',
-    '--java-executable', jdks[newest] .. '/bin/java',
-    '--jvm-arg=-javaagent:' .. mason_jdtls .. '/lombok.jar',
+    jdks[newest] .. '/bin/java.exe',
+    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    '-Dosgi.bundles.defaultStartLevel=4',
+    '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    '-Xmx1g',
+    '-javaagent:' .. mason_jdtls .. '/lombok.jar',
+    '--add-modules=ALL-SYSTEM',
+    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+    '-jar', launcher,
+    '-configuration', mason_jdtls .. '/config_win',
     '-data', workspace_dir,
-  },
+  }
+end
+
+jdtls.start_or_attach {
+  cmd = cmd,
   root_dir = root_dir,
   settings = {
     java = {
