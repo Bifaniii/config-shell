@@ -54,3 +54,15 @@ command -v nvim >/dev/null 2>&1 && alias vim=nvim
 
 # Spring Boot: novo projeto Maven com Java 17
 alias springnew='spring init --build=maven --java-version=17'
+
+# cr: escolhe uma sessão do Claude Code de qualquer pasta (fzf), entra na pasta e retoma.
+# Uso: cr            -> lista tudo
+#      cr suporte    -> já abre filtrando por "suporte"
+cr() {
+  local line dir sid
+  line=$(claude-sessions | fzf --delimiter=$'\t' --with-nth=1,2,3 --query="$*" \
+    --header='Enter: retomar sessão' --height=60% --reverse) || return
+  dir=${$(print -r -- "$line" | cut -f3)/#\~/$HOME}
+  sid=$(print -r -- "$line" | cut -f4)
+  cd "$dir" && claude --resume "$sid"
+}
