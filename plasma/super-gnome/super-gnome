@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Tecla Super como no GNOME (Plasma), ligada ao Super em kglobalshortcutsrc (super-gnome.desktop):
+#   1 toque  = visão geral (janelas em miniatura); com a grade de apps aberta, fecha a grade
+#   2 toques = grade de aplicativos (Launchpad da barra, via "activate application launcher" = Alt+F1 / Meta+A)
+f="${XDG_RUNTIME_DIR:-/tmp}/super-gnome.ultimo"
+agora=$(date +%s%3N)
+antes=$(cat "$f" 2>/dev/null || echo 0)
+kg() { qdbus6 org.kde.kglobalaccel "/component/$1" org.kde.kglobalaccel.Component.invokeShortcut "$2"; }
+
+if (( agora - antes < 600 )); then
+    echo 0 > "$f"
+    # o 1º toque abriu a visão geral: fecha antes de abrir a grade
+    qdbus6 org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep -qx overview && kg kwin Overview
+    kg plasmashell "activate application launcher"
+else
+    echo "$agora" > "$f"
+    # decide dentro do KWin (precisa ver se a grade está na tela)
+    id=$(qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript "$HOME/.local/share/super-gnome/toque.js" super-gnome-toque)
+    qdbus6 org.kde.KWin "/Scripting/Script$id" org.kde.kwin.Script.run
+    qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript super-gnome-toque >/dev/null
+fi

@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [ { "Name": "Guilherme" } ],
+        "Category": "Windows and Tasks",
+        "Description": "Botão Atividades (como no GNOME): um clique abre a visão geral das janelas abertas",
+        "Icon": "view-grid",
+        "Id": "guilherme.atividades",
+        "Name": "Atividades",
+        "Version": "1.0"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

@@ -1,0 +1,13 @@
+[General]
+count=1
+rules=kitty-metade-de-baixo
+
+[kitty-metade-de-baixo]
+Description=kitty na metade de baixo
+position=0,384
+positionrule=3
+size=1366,384
+sizerule=3
+types=1
+wmclass=kitty
+wmclassmatch=1

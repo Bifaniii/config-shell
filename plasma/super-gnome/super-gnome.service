@@ -1,0 +1,6 @@
+[Unit]
+Description=Tecla Super como no GNOME (Plasma)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/super-gnome
