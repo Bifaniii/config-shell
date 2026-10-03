@@ -20,8 +20,13 @@ else
     git clone --depth=1 -q https://github.com/vinceliuice/WhiteSur-icon-theme.git "$tmp/icons"
     "$tmp/gtk/install.sh"   -c Dark -c Light >/dev/null
     "$tmp/icons/install.sh" -t default >/dev/null
+    info "Tema WhiteSur também na tela de login (GDM; pede sudo)"
+    sudo "$tmp/gtk/tweaks.sh" -g >/dev/null || warn "Tema do GDM falhou; rode o tweaks.sh -g do WhiteSur"
     rm -rf "$tmp"
 fi
+
+step "Tela de login (GDM)"
+"$REPO/gdm/fundo-login.sh" || warn "Fundo do login falhou; rode gdm/fundo-login.sh"
 
 step "Wallpapers"
 mkdir -p "$HOME/.local/share/backgrounds"

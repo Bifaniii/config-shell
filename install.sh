@@ -7,25 +7,29 @@
 # Etapas (cada uma também roda sozinha):
 #   ./install-apps.sh      programas: apt, flatpak, SDKMAN, npm, extensões do VS Code
 #   ./install-desktop.sh   GNOME: tema WhiteSur, wallpaper, atalhos, dash-to-dock, blur
-#   ./install-neovim.sh    neovim 0.12 + kickstart.nvim + LSP de Java
-#   ./install-dracula.sh   paleta Dracula do terminal
+#   ./install-neovim.sh    neovim 0.12 + kickstart.nvim + LSP de Java e web
+#   ./install-kitty.sh     terminal kitty (padrão) com a config de kitty/
+#   ./install-plasma.sh    KDE Plasma 6 ao lado do GNOME (personalização: plasma/aplicar.sh)
+#   ./install-dracula.sh   paleta Dracula do gnome-terminal
 #
 # Flags:
 #   --no-apps       pula a instalação de programas (só configs)
 #   --no-desktop    pula o ambiente GNOME
+#   --no-plasma     não instala o KDE Plasma
 #   --pastelterm    usa a paleta pastelterm em vez da Dracula
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$REPO/lib/common.sh"
 
-DO_APPS=1; DO_DESKTOP=1; PALETTE=dracula
+DO_APPS=1; DO_DESKTOP=1; DO_PLASMA=1; PALETTE=dracula
 for arg in "$@"; do
     case "$arg" in
         --no-apps)    DO_APPS=0 ;;
         --no-desktop) DO_DESKTOP=0 ;;
+        --no-plasma)  DO_PLASMA=0 ;;
         --pastelterm) PALETTE=pastelterm ;;
-        -h|--help)    sed -n '2,20p' "$0"; exit 0 ;;
+        -h|--help)    sed -n '2,19p' "$0"; exit 0 ;;
         *) warn "Opção desconhecida: $arg"; exit 1 ;;
     esac
 done
@@ -88,6 +92,14 @@ fi
 # ---------- 6. neovim + paleta do terminal ----------
 step "Neovim"
 "$REPO/install-neovim.sh"
+
+step "Terminal kitty"
+"$REPO/install-kitty.sh"
+
+if (( DO_PLASMA )); then
+    step "KDE Plasma"
+    "$REPO/install-plasma.sh"
+fi
 
 if [[ "$PALETTE" == "dracula" ]]; then
     "$REPO/install-dracula.sh"

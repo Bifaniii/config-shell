@@ -18,7 +18,8 @@ cd ~/config-shell
 |---|---|
 | `--no-apps` | pula a instalação de programas; instala só o mínimo e restaura as configs |
 | `--no-desktop` | pula o ambiente GNOME (tema, wallpaper, atalhos, extensões) |
-| `--pastelterm` | usa a paleta pastelterm no terminal em vez da Dracula |
+| `--no-plasma` | não instala o KDE Plasma |
+| `--pastelterm` | usa a paleta pastelterm no gnome-terminal em vez da Dracula |
 
 ## Scripts
 
@@ -26,11 +27,15 @@ Cada etapa também roda sozinha:
 
 | script | o que faz |
 |---|---|
-| `install.sh` | orquestra tudo (chama os quatro abaixo) |
+| `install.sh` | orquestra tudo (chama os de baixo) |
 | `install-apps.sh` | apt + repos de terceiros, flatpak, SDKMAN, npm global, extensões do VS Code |
 | `install-desktop.sh` | tema WhiteSur, wallpapers, atalhos, dash-to-dock, blur, nautilus, GTK |
 | `install-neovim.sh` | Neovim 0.12 (binário oficial em `~/.local`) + kickstart.nvim + LSPs de Java e web |
-| `install-dracula.sh` | paleta Dracula do terminal (`--pastelterm` volta as cores) |
+| `install-kitty.sh` | terminal kitty (binário oficial em `~/.local`), config de `kitty/`, vira o terminal padrão |
+| `install-plasma.sh` | KDE Plasma 6 ao lado do GNOME, cursores WhiteSur |
+| `plasma/aplicar.sh` | aplica a personalização do Plasma; roda dentro de uma sessão Plasma |
+| `gdm/fundo-login.sh` | papel de parede no fundo da tela de login (GDM) e foto da conta |
+| `install-dracula.sh` | paleta Dracula do gnome-terminal (`--pastelterm` volta as cores) |
 | `backup.sh` | re-exporta pro repo tudo que não é symlink (dconf, listas de pacotes, configs de apps) |
 | `install-neovim.ps1` | só o Neovim, no Windows (veja [Neovim no Windows](#neovim-no-windows)) |
 
@@ -41,9 +46,14 @@ packages/     apt.txt (curado à mão), apt-repos.sh, flatpak.txt, sdkman.txt,
               npm-global.txt, vscode-extensions.txt
 gnome/        terminal-dracula.dconf, terminal-pastelterm.dconf, interface, desktop,
               shell, nautilus, gtk, keybindings-*, shell-extensions.txt
-zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvim)
+zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvim, cr)
+              .zshenv (tela de boas-vindas do kitty)
 vim/          .vimrc + colors/pastelterm.vim
 nvim/         kickstart.nvim (init.lua) + ftplugin/java.lua (jdtls) + neo-tree
+kitty/        kitty.conf, abrir.sh, boas-vindas.jsonc (fastfetch) + imagens
+plasma/       aplicar.sh, layout.js (painéis), BreezePreto.colors, kwinrulesrc,
+              plasmoids/ (Atividades, Launchpad), aurorae/ (botões macOS), super-gnome/
+gdm/          fundo-login.sh
 git/          .gitconfig
 vscode/       settings.json
 flameshot/    flameshot.ini
@@ -53,7 +63,8 @@ lib/          common.sh (funções compartilhadas pelos scripts)
 
 ### Dotfiles são symlinks
 
-`~/.zshrc`, `~/.vimrc`, `~/.vim/colors/pastelterm.vim`, `~/.gitconfig` e `~/.config/nvim`
+`~/.zshrc`, `~/.zshenv`, `~/.vimrc`, `~/.vim/colors/pastelterm.vim`, `~/.gitconfig`,
+`~/.config/nvim` e `~/.config/kitty`
 apontam pra dentro deste repo. Se editar um deles, a mudança já está no repo e só falta o `git commit`.
 Arquivos que existiam antes viram `*.bak-<data>`.
 
@@ -155,6 +166,57 @@ parsers e servidores de linguagem. Pode rodar de novo quando quiser: ele pula o 
 No Windows não tem SDKMAN: o `ftplugin/java.lua` procura os JDKs em
 `C:\Program Files\Eclipse Adoptium` e sobe o jdtls direto pelo launcher do Eclipse, sem Python.
 Pra atualizar a config depois, é só `git -C ~\config-shell pull`.
+
+## Terminal kitty
+
+O kitty é o terminal padrão (`Ctrl + Alt + T`, dock, "abrir terminal aqui"). A config fica em
+`kitty/`: JetBrains Mono 12, fundo preto puro e paleta forte preto/vermelho. Ele abre na metade de
+baixo da tela, mas é uma janela normal: dá pra redimensionar, maximizar com dois cliques na barra ou
+usar `F11` pra tela cheia. No GNOME quem posiciona é o `kitty/abrir.sh`; no Plasma, uma regra do KWin.
+Ao abrir, o `~/.zshenv` mostra uma tela de boas-vindas (fastfetch com o logo do Debian).
+
+| tecla | ação |
+|---|---|
+| `Alt + V` / `Alt + H` | novo split ao lado / embaixo (na mesma pasta) |
+| `Ctrl + Shift + Enter` | novo split no lado com mais espaço |
+| `Alt + setas` | pula entre os splits |
+| `Ctrl + Shift + R` | redimensiona o split (setas, `Esc` sai) |
+| `Ctrl + Shift + Z` | zoom no split atual |
+| `Ctrl + Shift + T` | nova aba |
+| `F11` | tela cheia |
+
+## KDE Plasma
+
+Instalado ao lado do GNOME: na tela de login, a engrenagem escolhe "Plasma (Wayland)" ou "GNOME".
+Depois do primeiro login no Plasma, rode `~/config-shell/plasma/aplicar.sh`, que monta tudo:
+
+- Breeze Dark com o esquema "Breeze Preto" (fundos pretos) e destaque vermelho `#e60000`, ícones
+  WhiteSur-dark, cursor WhiteSur e botões de janela do macOS à esquerda, com a barra quase preta.
+- Barra em cima e dock embaixo, as duas escondidas até o mouse encostar na borda. A barra tem o botão
+  Atividades, relógio, CPU/memória e a bandeja com a % da bateria. A dock começa pelo Launchpad.
+- Nada abre ao encostar o mouse nos cantos. Área de trabalho sem ícones (os arquivos continuam na pasta).
+- Teclado ABNT2 e rolagem natural no touchpad, como no GNOME.
+
+| tecla | ação |
+|---|---|
+| Super (1 toque) | Visão geral: janelas abertas em miniatura |
+| Super (2 toques), `Meta + A`, `Alt + F1` | Launchpad: todos os apps em grade |
+| `Ctrl + Space` | busca (KRunner), no centro da tela como o Spotlight |
+| `Ctrl + Alt + T` | kitty |
+| `Print` | Flameshot |
+
+O Launchpad é o [Launchpad plasma 6](https://store.kde.org/p/2174238) da KDE Store, com dois ajustes
+locais (a busca cabia fora da tela em monitores de 768 px e ficava invisível no tema preto). O botão
+Atividades e a tecla Super são daqui (`plasma/plasmoids/guilherme.atividades`, `plasma/super-gnome/`).
+GNOME e Plasma dividem as configurações GTK; o `plasma/tema-gtk-da-sessao`, chamado no login de cada
+sessão, reaplica o tema certo de cada uma. Por isso o `backup.sh` não exporta `interface.dconf` nem
+`desktop.dconf` quando roda no Plasma.
+
+## Tela de login
+
+É o GDM com o tema WhiteSur (instalado pelo `install-desktop.sh` com `tweaks.sh -g`). O
+`gdm/fundo-login.sh` troca o fundo pelo papel de parede do Debian e põe a foto da conta a partir de
+`~/Imagens/itachi.jpg`, que fica fora do repo. Rode de novo se o tema do GDM for reinstalado.
 
 ## Paletas do terminal
 

@@ -16,7 +16,12 @@ if has_gui; then
     info "Paleta ativa: $palette"
     dconf dump /org/gnome/terminal/ > "$REPO/gnome/terminal-$palette.dconf"
 
-    dconf dump /org/gnome/desktop/interface/                  > "$REPO/gnome/interface.dconf"
+    # no Plasma o ramo interface guarda o tema do Plasma (plasma/tema-gtk-da-sessao): não exporta
+    if [[ "${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
+        warn "Sessão Plasma: gnome/interface.dconf não exportado (rode o backup no GNOME para atualizá-lo)"
+    else
+        dconf dump /org/gnome/desktop/interface/              > "$REPO/gnome/interface.dconf"
+    fi
     dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$REPO/gnome/keybindings-media.dconf"
     dconf dump /org/gnome/desktop/wm/keybindings/             > "$REPO/gnome/keybindings-wm.dconf"
     dconf dump /org/gnome/nautilus/                           > "$REPO/gnome/nautilus.dconf"
@@ -24,12 +29,17 @@ if has_gui; then
     dconf dump /org/gnome/shell/ \
         | grep -vE '^(app-picker-layout|welcome-dialog|command-history|had-bluetooth|looking-glass|device-list|locations)' \
         > "$REPO/gnome/shell.dconf"
+    # no Plasma, o kde-gtk-config grava os botões de janela dele em wm/preferences: não exporta
+    if [[ "${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
+        warn "Sessão Plasma: gnome/desktop.dconf não exportado"
+    else
     {
         for sec in wm/preferences peripherals input-sources screensaver background; do
             echo "[${sec}]"
             dconf dump "/org/gnome/desktop/${sec}/" | tail -n +2
         done
     } > "$REPO/gnome/desktop.dconf"
+    fi
     {
         dconf dump /org/gtk/settings/ | grep -vE 'window-position|window-size|custom-colors|selected-color'
         dconf dump /org/gtk/gtk4/settings/
