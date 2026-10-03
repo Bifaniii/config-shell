@@ -1,7 +1,7 @@
 [/]
 disabled-extensions=['Bluetooth-Battery-Meter@maniacx.github.com', 'blur-my-shell@aunetx']
-enabled-extensions=['upower-battery@codilia.com', 'dash-to-dock@micxgx.gmail.com', 'quick-settings-tweaks@qwreey', 'user-theme@gnome-shell-extensions.gcampax.github.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'org.gnome.Calculator.desktop', 'google-chrome.desktop', 'com.discordapp.Discord.desktop', 'com.anthropic.Claude.desktop', 'com.jetbrains.IntelliJ-IDEA-Community.desktop', 'postman.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'spotify.desktop']
+enabled-extensions=['upower-battery@codilia.com', 'quick-settings-tweaks@qwreey', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'dash-to-dock@micxgx.gmail.com']
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.gnome.Calculator.desktop', 'google-chrome.desktop', 'com.discordapp.Discord.desktop', 'com.anthropic.Claude.desktop', 'com.jetbrains.IntelliJ-IDEA-Community.desktop', 'postman.desktop', 'kitty.desktop', 'code.desktop', 'spotify.desktop']
 last-selected-power-profile='power-saver'
 
 [extensions/Bluetooth-Battery-Meter]
