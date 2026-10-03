@@ -85,6 +85,8 @@ if [[ -n "$WALL" ]]; then
         kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key $k "file://$WALL"
     done
 fi
+# tela de bloqueio sem os controles de mídia (mostravam o que está tocando, ex. a aba do Chrome)
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group LnF --group General --key showMediaControls false
 kwriteconfig6 --file kdeglobals --group General --key fixed "JetBrains Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 kwriteconfig6 --file kdeglobals --group General --key TerminalApplication kitty
 kwriteconfig6 --file kdeglobals --group General --key TerminalService kitty.desktop
