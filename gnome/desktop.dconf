@@ -1,5 +1,5 @@
 [wm/preferences]
-button-layout=':minimize,maximize,close'
+button-layout='close,minimize,maximize:'
 [peripherals]
 speed=1.0
 
