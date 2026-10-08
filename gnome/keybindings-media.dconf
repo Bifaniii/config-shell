@@ -3,7 +3,7 @@ custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybin
 
 [custom-keybindings/custom0]
 binding='<Control><Alt>t'
-command='/home/guilherme/.local/kitty.app/bin/kitty'
+command='/home/guilherme/.config/kitty/terminal.sh'
 name='Terminal'
 
 [custom-keybindings/custom1]

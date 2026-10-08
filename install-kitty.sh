@@ -4,7 +4,7 @@
 #
 # - fundo preto, paleta preto/vermelho, JetBrains Mono, splits (Alt+V / Alt+H)
 # - tela de boas-vindas (fastfetch + logo do Debian) via ~/.zshenv, só dentro do kitty
-# - vira o terminal padrão: Ctrl+Alt+T, "abrir terminal aqui" do Nautilus/Dolphin
+# - vira o terminal padrão; Ctrl+Alt+T (kitty/terminal.sh) abre aba nova se o kitty já estiver aberto
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

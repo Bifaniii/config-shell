@@ -50,7 +50,7 @@ zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvi
               .zshenv (tela de boas-vindas do kitty)
 vim/          .vimrc + colors/pastelterm.vim
 nvim/         kickstart.nvim (init.lua) + ftplugin/java.lua (jdtls) + neo-tree
-kitty/        kitty.conf, boas-vindas.jsonc (fastfetch) + imagens
+kitty/        kitty.conf, terminal.sh (Ctrl+Alt+T), copiar_ou_colar.py, boas-vindas.jsonc + imagens
 plasma/       aplicar.sh, layout.js (painéis), BreezePreto.colors,
               plasmoids/ (Atividades, Launchpad), aurorae/ (botões macOS), super-gnome/
 gdm/          fundo-login.sh
@@ -171,6 +171,8 @@ Pra atualizar a config depois, é só `git -C ~\config-shell pull`.
 
 O kitty é o terminal padrão (`Ctrl + Alt + T`, dock, "abrir terminal aqui"). A config fica em
 `kitty/`: JetBrains Mono 12, fundo preto puro e paleta forte preto/vermelho. `F11` alterna tela cheia.
+Com o kitty já aberto, `Ctrl + Alt + T` abre uma aba nova nele em vez de outra janela (`kitty/terminal.sh`,
+pelo controle remoto do kitty).
 Ao abrir, o `~/.zshenv` mostra uma tela de boas-vindas (fastfetch com o logo do Debian).
 
 | tecla | ação |
@@ -180,7 +182,10 @@ Ao abrir, o `~/.zshenv` mostra uma tela de boas-vindas (fastfetch com o logo do 
 | `Alt + setas` | pula entre os splits |
 | `Ctrl + Shift + R` | redimensiona o split (setas, `Esc` sai) |
 | `Ctrl + Shift + Z` | zoom no split atual |
-| `Ctrl + Shift + T` | nova aba |
+| `Ctrl + Alt + T` / `Ctrl + Shift + T` | nova aba |
+| `Ctrl + PgUp` / `Ctrl + PgDn` | aba anterior / próxima |
+| `Ctrl + C` | copia, se houver texto selecionado (senão interrompe, como sempre) |
+| botão direito | copia a seleção; sem seleção, cola |
 | `F11` | tela cheia |
 
 ## KDE Plasma
