@@ -50,8 +50,8 @@ zsh/          .zshrc (oh-my-zsh, plugins, SDKMAN, NVM lazy, PATHs, alias vim=nvi
               .zshenv (tela de boas-vindas do kitty)
 vim/          .vimrc + colors/pastelterm.vim
 nvim/         kickstart.nvim (init.lua) + ftplugin/java.lua (jdtls) + neo-tree
-kitty/        kitty.conf, abrir.sh, boas-vindas.jsonc (fastfetch) + imagens
-plasma/       aplicar.sh, layout.js (painéis), BreezePreto.colors, kwinrulesrc,
+kitty/        kitty.conf, boas-vindas.jsonc (fastfetch) + imagens
+plasma/       aplicar.sh, layout.js (painéis), BreezePreto.colors,
               plasmoids/ (Atividades, Launchpad), aurorae/ (botões macOS), super-gnome/
 gdm/          fundo-login.sh
 git/          .gitconfig
@@ -170,9 +170,7 @@ Pra atualizar a config depois, é só `git -C ~\config-shell pull`.
 ## Terminal kitty
 
 O kitty é o terminal padrão (`Ctrl + Alt + T`, dock, "abrir terminal aqui"). A config fica em
-`kitty/`: JetBrains Mono 12, fundo preto puro e paleta forte preto/vermelho. Ele abre na metade de
-baixo da tela, mas é uma janela normal: dá pra redimensionar, maximizar com dois cliques na barra ou
-usar `F11` pra tela cheia. No GNOME quem posiciona é o `kitty/abrir.sh`; no Plasma, uma regra do KWin.
+`kitty/`: JetBrains Mono 12, fundo preto puro e paleta forte preto/vermelho. `F11` alterna tela cheia.
 Ao abrir, o `~/.zshenv` mostra uma tela de boas-vindas (fastfetch com o logo do Debian).
 
 | tecla | ação |

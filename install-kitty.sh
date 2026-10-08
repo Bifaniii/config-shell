@@ -4,7 +4,6 @@
 #
 # - fundo preto, paleta preto/vermelho, JetBrains Mono, splits (Alt+V / Alt+H)
 # - tela de boas-vindas (fastfetch + logo do Debian) via ~/.zshenv, só dentro do kitty
-# - abre na metade de baixo da tela: kitty/abrir.sh no GNOME (X11), regra do KWin no Plasma
 # - vira o terminal padrão: Ctrl+Alt+T, "abrir terminal aqui" do Nautilus/Dolphin
 set -euo pipefail
 
@@ -24,7 +23,7 @@ fi
 mkdir -p "$HOME/.local/bin" "$APPS"
 ln -sf "$KITTY_DIR/bin/kitty" "$KITTY_DIR/bin/kitten" "$HOME/.local/bin/"
 
-# atalhos de menu apontando para o binário (e para o abrir.sh, que posiciona a janela)
+# atalhos de menu apontando para o binário
 ICON="$KITTY_DIR/share/icons/hicolor/256x256/apps/kitty.png"
 for f in kitty.desktop kitty-open.desktop; do
     sed -e "s|Icon=kitty|Icon=$ICON|g" \
@@ -32,7 +31,6 @@ for f in kitty.desktop kitty-open.desktop; do
         -e "s|Exec=kitty|Exec=$KITTY_DIR/bin/kitty|g" \
         "$KITTY_DIR/share/applications/$f" > "$APPS/$f"
 done
-sed -i "s|^Exec=$KITTY_DIR/bin/kitty\$|Exec=$HOME/.config/kitty/abrir.sh|" "$APPS/kitty.desktop"
 update-desktop-database "$APPS" 2>/dev/null || true
 
 # ---------- config ----------

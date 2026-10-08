@@ -7,7 +7,7 @@
 # Painéis: barra em cima que se esconde (Atividades, relógio, CPU/memória, bandeja com % da bateria)
 #          + dock flutuante que se esconde (Launchpad + favoritos). Sem ícones na área de trabalho.
 # Teclas:  Super 1x = Visão geral; 2x / Meta+A / Alt+F1 = Launchpad; Ctrl+Space = busca (KRunner);
-#          Ctrl+Alt+T = kitty (abre na metade de baixo); Print = Flameshot.
+#          Ctrl+Alt+T = kitty; Print = Flameshot.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -65,7 +65,6 @@ NoDisplay=true
 X-GNOME-Autostart-Phase=Initialization
 EOF
 done
-cp "$P/kwinrulesrc" ~/.config/kwinrulesrc   # regra: kitty abre na metade de baixo
 kbuildsycoca6 >/dev/null 2>&1 || true
 
 # ---------- aparência ----------
