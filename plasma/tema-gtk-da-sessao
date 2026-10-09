@@ -6,6 +6,10 @@ case "${1:-}" in
         # volta o que está no repo (WhiteSur-Dark etc.) e reseta o que o Plasma mudou por fora dele
         gsettings reset org.gnome.desktop.interface font-name
         gsettings reset org.gnome.desktop.interface cursor-theme
+        # chaves que o kde-gtk-config do Plasma grava e o GNOME não usava
+        for k in cursor-size enable-animations scaling-factor text-scaling-factor toolbar-style; do
+            gsettings reset org.gnome.desktop.interface "$k"
+        done
         dconf load /org/gnome/desktop/interface/ < "$HOME/config-shell/gnome/interface.dconf"
         # botões das janelas (o Plasma troca para "icon:minimize,maximize,close")
         gsettings set org.gnome.desktop.wm.preferences button-layout \
