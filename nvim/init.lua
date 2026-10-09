@@ -779,7 +779,26 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
+    -- Python: basedpyright (autocomplete com import automático, inclusive da biblioteca padrão e do
+    -- próprio projeto, que o pyright puro não faz) + ruff (avisos, organizar imports, formatação)
+    basedpyright = {
+      settings = {
+        basedpyright = { analysis = { autoImportCompletions = true, typeCheckingMode = 'standard' } },
+      },
+      -- usa o .venv/venv do projeto, se existir, para enxergar as bibliotecas instaladas nele
+      on_init = function(client)
+        local exe = vim.fn.has 'win32' == 1 and '/Scripts/python.exe' or '/bin/python'
+        for _, dir in ipairs { '.venv', 'venv' } do
+          local python = (client.root_dir or vim.fn.getcwd()) .. '/' .. dir .. exe
+          if vim.uv.fs_stat(python) then
+            client.settings = vim.tbl_deep_extend('force', client.settings or {}, { python = { pythonPath = python } })
+            client:notify('workspace/didChangeConfiguration', { settings = client.settings })
+            break
+          end
+        end
+      end,
+    },
+    ruff = {},
     -- tsc = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -1003,7 +1022,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'java', 'javascript', 'typescript', 'tsx', 'css', 'scss', 'angular', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'java', 'javascript', 'typescript', 'tsx', 'css', 'scss', 'angular', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

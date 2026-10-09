@@ -135,6 +135,11 @@ o Emmet expande abreviações como `div.card>ul>li*3` e o nvim-ts-autotag fecha 
 então rode `npm install` antes de abrir. A indentação segue o `.editorconfig` do projeto
 (2 espaços num projeto Angular).
 
+Pra Python, o basedpyright dá o autocomplete com import automático (da biblioteca padrão, das
+bibliotecas instaladas e dos arquivos do próprio projeto: aceitar `Path` já escreve
+`from pathlib import Path`) e o ruff aponta erros e problemas de estilo. Se o projeto tiver `.venv`
+ou `venv`, o basedpyright usa o Python dele e enxerga as bibliotecas instaladas ali.
+
 | tecla | ação |
 |---|---|
 | `Space sf` / `Space sg` | buscar arquivo / buscar texto no projeto |

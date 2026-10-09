@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install-neovim.sh — Neovim 0.12 + config kickstart.nvim (nvim/) com LSP de Java (jdtls) e web/Angular.
+# install-neovim.sh — Neovim 0.12 + config kickstart.nvim (nvim/) com LSP de Java (jdtls), web/Angular e Python.
 # Chamado pelo install.sh; roda sozinho também.
 #
 # O neovim do apt (Debian 13) é velho demais para o kickstart atual (usa vim.pack, 0.12+),
@@ -67,8 +67,8 @@ info "Instalando plugins e parsers do treesitter"
 timeout 600 "$NVIM" --headless "+sleep 90" +qa </dev/null >/dev/null 2>&1 \
     || warn "Instalação de plugins falhou; abra o nvim e confira as mensagens"
 
-# Servidores de linguagem: Java (jdtls) e web/Angular (TS, Angular, HTML, CSS, Emmet)
-LSPS="jdtls typescript-language-server angular-language-server html-lsp css-lsp emmet-language-server"
+# Servidores de linguagem: Java (jdtls), web/Angular (TS, Angular, HTML, CSS, Emmet) e Python (basedpyright, ruff)
+LSPS="jdtls typescript-language-server angular-language-server html-lsp css-lsp emmet-language-server basedpyright ruff"
 info "Instalando os servidores de linguagem pelo Mason: $LSPS"
 timeout 900 "$NVIM" --headless "+MasonInstall $LSPS" +qa </dev/null >/dev/null 2>&1 \
     || warn "Mason falhou; abra o nvim e rode :MasonInstall $LSPS"

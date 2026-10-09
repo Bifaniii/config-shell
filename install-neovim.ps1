@@ -12,7 +12,7 @@
 
 $ErrorActionPreference = 'Stop'
 $RepoUrl = 'https://github.com/Bifaniii/config-shell.git'
-$LSPS = 'jdtls typescript-language-server angular-language-server html-lsp css-lsp emmet-language-server'
+$LSPS = 'jdtls typescript-language-server angular-language-server html-lsp css-lsp emmet-language-server basedpyright ruff'
 
 function Info($msg) { Write-Host "==> $msg" -ForegroundColor Green }
 function Warn($msg) { Write-Host "!! $msg" -ForegroundColor Yellow }
